@@ -59,7 +59,7 @@ Contributions are attributed and rewarded. Threat model contributions, adversari
 
 The XRPL has a two-phase release model that this framework must respect:
 
-**Phase A — Centralised Build Pipeline (maintainer-controlled)**
+**Phase A — Maintainer Controlled Build Pipeline**
 
 Code is proposed (by anyone — core team or external contributor), reviewed, merged, and compiled into a `rippled` binary. This phase is a traditional software development process governed by the maintainer team. The gates in this framework (Gates 0–4) apply here and can be enforced through repository policy, CI/CD, and maintainer discipline.
 
