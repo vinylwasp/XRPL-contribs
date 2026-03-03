@@ -469,7 +469,7 @@ Progress can be measured against these indicators:
 
 ### XRPL-Specific
 
-- [XLS-0056 Batch Amendment — Security SDLC Analysis (Vitruvius, 2026-03-02)](https://github.com/vinylwasp/XRPL-contribs/blob/main/XLS-0056-secure-dev.md) — companion gap analysis document
+- [XLS-0056 Batch Amendment — Security SDLC Analysis (Vinywasp, 2026-03-02)](https://github.com/vinylwasp/XRPL-contribs/blob/main/XLS-0056-secure-dev.md) — companion gap analysis document
 - [XLS-0056 Specification](https://github.com/XRPLF/XRPL-Standards/tree/master/XLS-0056-batch)
 - [XRPL-Standards PR #452 — Integration Considerations](https://github.com/XRPLF/XRPL-Standards/pull/452)
 - [rippled PR #5060 — Batch (XLS-56)](https://github.com/XRPLF/rippled/pull/5060)
