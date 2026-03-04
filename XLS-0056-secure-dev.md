@@ -262,6 +262,126 @@ Key process failures:
 
 For a financial ledger where the amendment process is effectively irreversible once activated, these gaps are significant. The vulnerability was caught by luck — an external researcher and AI tooling during the voting window — rather than by a security gate built into the development process.
 
+## Why This Matters — Impact Analysis
+
+Had the Batch amendment activated on mainnet, this vulnerability would have allowed **universal, unauthenticated account takeover and fund drainage** across the entire XRP Ledger. This section quantifies the impact.
+
+### Attack construction
+
+The exploit is trivial to construct:
+
+1. The attacker generates a fresh keypair. The derived account (B) does not exist on-ledger.
+2. The attacker builds a Batch transaction containing inner transactions from the **victim's account** (e.g., a Payment draining funds to the attacker).
+3. The attacker places account B's `BatchSigner` entry **first** in the `BatchSigners` array, followed by the victim's signer entry with a forged or missing signature.
+4. The attacker signs the outer Batch transaction only with account B's key.
+5. `checkBatchSign` processes account B first: account does not exist on-ledger, signing key matches account ID → `return tesSUCCESS`. The loop exits. The victim's signer entry is **never validated**.
+6. Inner transactions execute as if the victim authorised them.
+
+No interaction with the victim is required. No brute-forcing. No social engineering. One keypair, one Batch transaction.
+
+### Exploitable transaction types
+
+The XLS-0056 specification places almost no restrictions on inner transaction types. The only prohibited types are `Batch` itself (no nesting) and disabled lending/vault types. **All standard XRPL transaction types were allowed**, including:
+
+| Transaction Type | What an attacker could do |
+|---|---|
+| **Payment** | Drain XRP and issued tokens from any account down to the reserve floor (~10 XRP) |
+| **SetRegularKey** | Set the attacker's key as the victim's regular key — **persistent account takeover that survives a code fix** |
+| **SignerListSet** | Replace the victim's multisig signer list, taking over governance entirely |
+| **AccountSet** | Modify account flags (disable master key, change settings) |
+| **OfferCreate / OfferCancel** | Manipulate DEX order books, place or cancel orders from victim accounts |
+| **AMMDeposit / AMMWithdraw** | Drain AMM liquidity positions |
+| **NFTokenCreateOffer / NFTokenAcceptOffer** | Steal NFTs |
+| **TrustSet** | Create trust lines from victim accounts to attacker-controlled issuers |
+| **EscrowCreate / EscrowFinish** | Manipulate escrows |
+| **PaymentChannelCreate / PaymentChannelFund** | Manipulate payment channels |
+| **CheckCreate / CheckCash** | Create checks payable to attacker from victim accounts |
+| **AccountDelete** | Delete victim accounts (subject to sequence age preconditions) |
+
+### No secondary defences
+
+Inner Batch transactions carry **no signatures of their own** by design — `SigningPubKey` must be empty and `TxnSignature` must be omitted. The entire security model delegates authentication to the outer transaction's `checkBatchSign` function. Once `checkBatchSign` returned `tesSUCCESS` prematurely, there was **zero fallback authorisation**.
+
+- **Preflight checks** validate structural correctness (valid fields, amounts), not authorisation.
+- **Preclaim checks** validate ledger state (sufficient balance, account exists), but run *after* the signature bypass — they assume the transaction is already authorised.
+- **Invariant checks** enforce per-transaction constraints (e.g., account cannot go below reserve), but do not verify whether the transaction was legitimately signed.
+- **DepositAuth** blocks *incoming* payments; the attack uses *outgoing* payments from the victim.
+- **Multisig, regular keys, disabled master keys** — none of these account-level security configurations would have helped, because the bypass occurred at the Batch signer level, not individual account authentication.
+
+### Value at risk
+
+| Metric | Approximate value (February 2026) | Source |
+|---|---|---|
+| XRP market capitalisation | ~$80–96 billion | CoinMarketCap, multiple media reports |
+| XRPL DeFi TVL | ~$51–55 million | DefiLlama |
+| XRPL RWA value | approaching $300 million | Industry reports, late February 2026 |
+
+The vulnerability was **universal** — every funded account on the XRPL was equally vulnerable regardless of its security configuration. An attacker could have automated mass drainage limited only by XRPL's transaction throughput (~1,500 TPS). `SetRegularKey` takeovers would have been **persistent**, surviving the emergency code fix and requiring individual account-by-account remediation by every affected user.
+
+The media framing of "$80 billion at risk" is directionally accurate. The exploit was mechanically simple, universally applicable, and had no mitigating controls. The only thing between a working exploit and mainnet activation was one more validator vote and an external researcher who happened to be analysing the right code at the right time.
+
+### Severity scoring — CWSS v1.0.1
+
+The vulnerability is classified as **CWE-305: Authentication Bypass by Primary Weakness**. The following CWSS (Common Weakness Scoring System) assessment uses MITRE's v1.0.1 methodology.
+
+**Vector:**
+
+```
+TI:C,1.0/AP:A,1.0/AL:A,1.0/IC:N,1.0/FC:T,1.0/RP:N,1.0/RL:A,1.0/AV:I,1.0/AS:N,1.0/IN:A,1.0/SC:A,1.0/BI:C,1.0/DI:H,1.0/EX:H,1.0/EC:N,1.0/P:W,1.0
+```
+
+#### Base Finding (technical severity)
+
+| Metric | Value | Weight | Justification |
+|---|---|---|---|
+| Technical Impact (TI) | Critical | 1.0 | Complete authentication bypass — arbitrary transactions executed without victim's private key |
+| Acquired Privilege (AP) | Administrator | 1.0 | Full account control: drain funds, set keys, delete account, modify governance |
+| Acquired Privilege Layer (AL) | Application | 1.0 | Protocol-level compromise — the authentication mechanism itself is bypassed |
+| Internal Control Effectiveness (IC) | None | 1.0 | No secondary authorisation checks exist for inner Batch transactions once `checkBatchSign` returns success |
+| Finding Confidence (FC) | Proven True | 1.0 | Independently verified by Ripple engineering with PoC and unit test reproduction on 19 February 2026 |
+
+**Base Finding subscore:** [(10×1.0 + 5×(1.0+1.0) + 5×1.0) × f(TI) × 1.0] × 4.0 = **100.0**
+
+#### Attack Surface (exploitability)
+
+| Metric | Value | Weight | Justification |
+|---|---|---|---|
+| Required Privilege (RP) | None | 1.0 | Attacker needs only a self-generated keypair — no existing account, no special access |
+| Required Privilege Layer (RL) | Application | 1.0 | Exploit operates at the XRPL protocol layer |
+| Access Vector (AV) | Internet | 1.0 | Batch transactions can be submitted to any public XRPL node via WebSocket or JSON-RPC |
+| Authentication Strength (AS) | None | 1.0 | No authentication is required to submit transactions to XRPL nodes; the attacker authenticates only with their own key |
+| Level of Interaction (IN) | Automated | 1.0 | No victim interaction required — fully automatable, no social engineering, no timing dependency |
+| Deployment Scope (SC) | All | 1.0 | Every XRPL validator and full-history node runs the same `rippled` binary; the amendment activates network-wide simultaneously |
+
+**Attack Surface subscore:** [20×(1.0+1.0+1.0) + 20×1.0 + 15×1.0 + 5×1.0] / 100.0 = **1.0**
+
+#### Environmental (real-world context)
+
+| Metric | Value | Weight | Justification |
+|---|---|---|---|
+| Business Impact (BI) | Critical | 1.0 | Financial protocol securing $80B+ in assets; exploitation would constitute the largest theft in cryptocurrency history |
+| Likelihood of Discovery (DI) | High | 1.0 | Simple logic flaw (`return` vs `continue`) discoverable by code review or automated static analysis; was in fact found by AI tooling |
+| Likelihood of Exploit (EX) | High | 1.0 | Trivial exploit construction — single keypair, single transaction, no prerequisites beyond the amendment being active |
+| External Control Effectiveness (EC) | None | 1.0 | No WAF, rate limiter, or external security control sits between a transaction submission and consensus processing |
+| Prevalence (P) | Widespread | 1.0 | Every node in the XRPL network runs the same code; 100% of deployments are affected once the amendment activates |
+
+**Environmental subscore:** [(10×1.0 + 3×1.0 + 4×1.0 + 3×1.0) × f(BI) × 1.0] / 20.0 = **1.0**
+
+#### Final CWSS score
+
+```
+CWSS = BaseFinding × AttackSurface × Environmental
+CWSS = 100.0 × 1.0 × 1.0 = 100.0 / 100
+```
+
+**CWSS Score: 100.0** — the theoretical maximum.
+
+Every metric scores at its highest severity value. This is consistent with the nature of the weakness: a complete authentication bypass in a financial protocol with no mitigating controls, no privilege requirements, internet-accessible attack surface, trivially automatable exploitation, and universal deployment scope. The score reflects a vulnerability that, had it activated, would have placed the entire value of the XRP Ledger at the disposal of any attacker who understood the `checkBatchSign` loop.
+
+### What actually happened
+
+The amendment was one validator vote from mainnet activation when Pranamya Keshkamat and Cantina's AI tool (Apex) identified the flaw on 19 February 2026. Ripple engineering validated the report with an independent proof-of-concept the same evening. Emergency release `rippled 3.1.1` shipped on 23 February 2026, marking both `featureBatch` and `fixBatchInnerSigs` as unsupported to prevent validator votes from activating the amendment. **No funds were lost.** The full logic fix is under development as the `BatchV1_1` amendment, with no release date set.
+
 ## Sources
 
 - [XLS-0056 Specification](https://github.com/XRPLF/XRPL-Standards/tree/master/XLS-0056-batch)
