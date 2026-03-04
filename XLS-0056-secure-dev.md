@@ -135,7 +135,7 @@ for (auto const& signer : signers)
 
 When a BatchSigner's account does not exist on-ledger and the signing key derives to the same account ID, the function returns `tesSUCCESS` immediately — exiting the `for` loop. Every subsequent signer in the array is never validated. An attacker can place a signer for a non-existent account first in the array, followed by signers for victim accounts with forged or missing signatures, and the loop will never reach them.
 
-The correct code should have used `continue` (proceed to next signer) rather than `return tesSUCCESS` (declare all signers valid). This is a classic instance of CWE-305 (Authentication Bypass by Primary Weakness).
+The correct code should have used `continue` (proceed to next signer) rather than `return tesSUCCESS` (declare all signers valid). This is a classic instance of [CWE-305: Authentication Bypass by Primary Weakness](https://cwe.mitre.org/data/definitions/305.html).
 
 **However, this bug was dormant at merge time.** PR #5060 also contained an inverted condition in `Transactor::preflight2`:
 
@@ -230,7 +230,7 @@ The vulnerability is the product of two PRs interacting:
 
 2. **PR #6069** (January 2026) correctly fixed the inverted `preflight2` condition, removing the redundant signature checks — the intended design. But this exposed the `checkBatchSign` early-exit bug that had been dormant for 8 months.
 
-Neither PR introduced the vulnerability alone. The root cause is `return tesSUCCESS` instead of `continue` in an authentication loop — a textbook instance of CWE-305 (Authentication Bypass by Primary Weakness). It sat undetected for 8 months, was activated by a well-intentioned fix, and nearly reached mainnet.
+Neither PR introduced the vulnerability alone. The root cause is `return tesSUCCESS` instead of `continue` in an authentication loop — a textbook instance of [CWE-305: Authentication Bypass by Primary Weakness](https://cwe.mitre.org/data/definitions/305.html). It sat undetected for 8 months, was activated by a well-intentioned fix, and nearly reached mainnet.
 
 ### Why standard security practices would have caught this
 
@@ -329,7 +329,7 @@ The combined exposure — $80B+ in XRP, $2.3B in tokenised RWAs, $1.56B in RLUSD
 
 ### Severity scoring — CWSS v1.0.1
 
-The vulnerability is classified as **CWE-305: Authentication Bypass by Primary Weakness**. The following CWSS (Common Weakness Scoring System) assessment uses MITRE's v1.0.1 methodology — the current version as of March 2026. CWSS has not been updated since September 2014; the version numbers sometimes confused with "CWSS 4" refer to the CWE *list* versioning (currently v4.17–4.19), not the scoring system itself. CWSS v1.0.1 remains the canonical weakness scoring framework published by MITRE ([source](https://cwe.mitre.org/cwss/cwss_v1.0.1.html)).
+The vulnerability is classified as **[CWE-305: Authentication Bypass by Primary Weakness](https://cwe.mitre.org/data/definitions/305.html)**. The following CWSS (Common Weakness Scoring System) assessment uses MITRE's v1.0.1 methodology — the current version as of March 2026. CWSS has not been updated since September 2014; the version numbers sometimes confused with "CWSS 4" refer to the CWE *list* versioning (currently v4.17–4.19), not the scoring system itself. CWSS v1.0.1 remains the canonical weakness scoring framework published by MITRE ([source](https://cwe.mitre.org/cwss/cwss_v1.0.1.html)).
 
 **Vector:**
 
