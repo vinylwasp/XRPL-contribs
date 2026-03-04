@@ -48,11 +48,48 @@ Four modes with defined failure behaviour represent significant combinatorial co
 | Threat model (STRIDE, PASTA, attack trees) | None visible | No "Threats" section, no attacker personas, no structured abuse-case enumeration |
 | Evil user stories | None | "As an attacker, I submit a Batch where one BatchSigner controls a non-existent account to bypass validation of subsequent signers" — this is the exact bug that shipped |
 | Trust boundary analysis | None | The outer/inner transaction boundary is a classic trust boundary; who authenticates what, when, and what happens when validation short-circuits is never formally modelled |
-| SAST / DAST | No evidence | No mention of static analysis tooling, fuzz testing, or dynamic scanning in the specification or visible PR process |
+| Security-focused SAST / DAST | Absent — see [Static Analysis Tooling](#static-analysis-tooling) below | The CI pipeline runs **clang-tidy** (a general C++ linter) on PRs and daily, but no security-focused SAST (Semgrep, CodeQL, Coverity) is configured. No fuzz testing or dynamic scanning is visible. clang-tidy's bugprone checks do not cover authentication-logic flaws like CWE-305. |
 | Formal security review or audit | None before voting began | The bug was found by an external researcher during the voting window, not during development or a pre-release review gate |
 | Security-focused test cases | Not visible | The spec defines happy-path failure conditions but no adversarial test matrix; no test for "what if the signer account doesn't exist on-ledger?" |
 | Combinatorial edge-case analysis | Insufficient | 4 batch modes x multi-account signing x non-existent accounts x key-matching conditions produces a large state space with no visible systematic coverage |
 | Independent security review gate | None | The feature reached the validator voting stage without evidence of a dedicated security review before entering the activation pipeline |
+
+### Static Analysis Tooling
+
+A review of the `XRPLF/rippled` repository's CI pipeline (March 2026) reveals the following static analysis posture:
+
+**What is present:**
+
+- **clang-tidy** runs on every PR (changed files only) and on a daily schedule against `develop` and `release` branches. The `.clang-tidy` configuration enables extensive `bugprone-*` checks. This is the repository's only automated static analysis tool.
+- **Pre-commit hooks** (`.pre-commit-config.yaml`) enforce formatting (clang-format, prettier, black, cmake-format), spell-checking (cspell), and basic hygiene (trailing whitespace, merge conflict markers). None are security-focused.
+
+**What is absent:**
+
+- No **Semgrep** configuration (`.semgrep.yml`, `.semgrep/` rules directory) exists anywhere in the repository. A code search for "semgrep" across the entire `XRPLF` GitHub organisation returns zero results. The only reference is a single commit (PR #5903, October 2025) that cites Semgrep's *published guidance* on GitHub Actions input sanitisation — the developer followed Semgrep's advice, but Semgrep does not run as a tool in the pipeline.
+- No **CodeQL**, **Coverity**, **Snyk**, or other security-focused SAST tooling is configured.
+- No **fuzz testing** infrastructure (libFuzzer, AFL, OSS-Fuzz integration) is visible.
+- The GitHub code-scanning API returns HTTP 403 (not publicly accessible), so a Semgrep GitHub App integration cannot be conclusively ruled out. However, the complete absence of configuration files, rule definitions, and any textual reference to Semgrep in the codebase makes this unlikely.
+
+**Could SAST run privately at Ripple?**
+
+It is reasonable to assume that Ripple, as a regulated fintech company, may operate internal security tooling that is not visible in the public `XRPLF/rippled` repository. Enterprise SAST platforms (including Semgrep AppSec Platform) can run against private mirrors or internal repos without requiring configuration files in the public codebase. This analysis does not claim that Ripple has no security tooling — only that none is visible in the public development pipeline where this vulnerability was introduced.
+
+However, several observations constrain how effective any private SAST could have been for XLS-0056:
+
+1. **Development happened in public.** PRs #5060 and #6069 were authored, reviewed, and merged on `XRPLF/rippled` — not mirrored from an internal repository. If SAST runs only on a private mirror, it would catch issues *after* code lands on the public default branch, not at PR review time when it matters most.
+2. **All CI checks are visible.** PR #5060 showed 26 passing checks; PR #6069 showed 24. None reference security scanning. If a private Semgrep integration ran as a PR check, it would typically appear in the checks list even if detailed results were gated behind authentication.
+3. **No custom rules checked in.** Even organisations running Semgrep privately typically maintain `.semgrep/` rule directories or reference custom rule packs in their configuration. The absence of any such artifacts suggests that if SAST runs privately, it uses only generic rulesets — not custom rules tailored to rippled's authentication patterns, which is where the real value lies for catching defects like CWE-305.
+4. **The outcome speaks for itself.** The vulnerability survived two PRs and 8 months of development. If security SAST was running at any stage of the pipeline — public or private — it either did not flag the early-return pattern in `checkBatchSign`, or the finding was not actioned. Neither outcome supports the claim that SAST provided meaningful security coverage for this feature.
+
+This analysis gives Ripple the benefit of the doubt that internal tooling may exist. But the relevant question is not whether a tool is *installed* — it is whether it *prevented the defect*. On that measure, the evidence is clear: no automated security analysis, public or private, caught this bug before an external researcher did.
+
+**Why this matters for XLS-0056:**
+
+clang-tidy is a valuable general-purpose C++ linter, but its `bugprone-*` checks operate at the syntactic and type-safety level. It does not model authentication semantics or control-flow implications of early returns in validation loops. The `checkBatchSign` bug — `return tesSUCCESS` instead of `continue` inside a signer-validation loop — is syntactically valid C++ and would not trigger clang-tidy warnings.
+
+Security-focused SAST tools (Semgrep, CodeQL) support custom rules that flag exactly this class of defect: early exits from authentication/authorisation loops, `return` where `continue` was likely intended in validation contexts, and success-path short-circuits in multi-entity verification. A Semgrep rule matching `return $SUCCESS` inside `for` loops within functions named `*Sign*` or `*Auth*` would be straightforward to write and would have flagged this code at PR time.
+
+The absence of security-focused SAST in the public pipeline — and the absence of any observable effect from private tooling, if it exists — means no automated analysis validated code *security* for this feature. For a financial protocol where authentication bypass has catastrophic consequences, this is a material gap.
 
 ## PR Trail — Who Built, Reviewed, and Merged What
 
@@ -201,7 +238,7 @@ Neither PR introduced the vulnerability alone. The root cause is `return tesSUCC
 
 2. **Evil user stories.** "As an attacker, I submit a Batch where the first BatchSigner controls a non-existent account, followed by signers for victim accounts with forged signatures." Structured misuse-case analysis would surface this scenario.
 
-3. **SAST.** Static analysis tools flag early-return patterns in authentication loops as high-risk. The `return tesSUCCESS` inside a `for` loop that validates multiple signers is a well-known anti-pattern.
+3. **Security-focused SAST.** The repository runs clang-tidy, but this is a general C++ linter — not a security SAST tool. Security-focused static analysis (Semgrep, CodeQL) flags early-return patterns in authentication loops as high-risk. The `return tesSUCCESS` inside a `for` loop that validates multiple signers is a well-known anti-pattern (CWE-305). A Semgrep rule targeting `return` statements inside signer/auth validation loops would have flagged this at PR time. No such tooling is configured in the rippled CI pipeline despite claims to the contrary — see [Static Analysis Tooling](#static-analysis-tooling).
 
 4. **Adversarial test cases.** A test matrix combining {existent account, non-existent account} x {valid key, invalid key} x {first signer, middle signer, last signer} would have 18 cases. The bug is triggered by any test with a non-existent matching-key signer followed by any other signer.
 
@@ -219,6 +256,7 @@ Key process failures:
 - **Closed review loop** — the same small group (@dangell7, @mvadari, @ximinez) authored, reviewed, and approved all Batch PRs with no external security perspective
 - **Dismissed reviewer concern** — @dangell7's "This doesn't seem right" comment on PR #6069 was not escalated or investigated
 - **No adversarial test cases** — high code coverage but zero authentication bypass scenarios
+- **Static analysis is quality-focused, not security-focused** — clang-tidy runs in CI but does not detect authentication-logic flaws; no security SAST (Semgrep, CodeQL, Coverity) is configured despite the repository handling cryptographic authentication for a financial protocol
 - **Spec still being written during voting** — integration considerations added 2 days before the vulnerability disclosure
 - **No security gate before the amendment entered validator voting** — the last chance to catch issues before an irreversible mainnet activation
 
@@ -230,5 +268,12 @@ For a financial ledger where the amendment process is effectively irreversible o
 - [XRPL-Standards PR #452 — Integration Considerations](https://github.com/XRPLF/XRPL-Standards/pull/452)
 - [PR #5060 — Batch (XLS-56)](https://github.com/XRPLF/rippled/pull/5060)
 - [PR #6069 — fix: Inner batch transactions never have valid signatures](https://github.com/XRPLF/rippled/pull/6069)
+- [PR #5903 — Sanitize GitHub Actions inputs (sole Semgrep reference)](https://github.com/XRPLF/rippled/pull/5903)
 - [XRPL Vulnerability Disclosure Report (Feb 2026)](https://xrpl.org/blog/2026/vulnerabilitydisclosurereport-bug-feb2026)
 - [XRPL batch amendment security patch blocks mainnet risk](https://en.cryptonomist.ch/2026/02/27/xrpl-batch-amendment-security/)
+
+### Verification note (2026-03-04)
+
+The SAST assessment was revalidated against the `XRPLF/rippled` public repository in response to a claim that Semgrep is used upstream before binary builds. Verification included: enumeration of all 14 GitHub Actions workflow files, inspection of `.pre-commit-config.yaml`, repository-wide code search for "semgrep" (zero results), org-wide code search across `XRPLF` (zero results), and API checks for `.semgrep.yml` and `.semgrep/` directory (404). The only Semgrep reference found is a commit message in PR #5903 citing Semgrep's published security guidance — not evidence of Semgrep as a pipeline tool. The GitHub code-scanning API returned 403 (not public), so a private GitHub App integration cannot be conclusively excluded, but no supporting artifacts exist in the public repository.
+
+The possibility that Ripple runs SAST internally on a private repository or mirror was considered and addressed in the "Could SAST run privately at Ripple?" section. The analysis acknowledges this possibility but notes that (a) all Batch development occurred on the public repo, (b) no CI checks reference security scanning, (c) no custom SAST rules are checked in, and (d) the vulnerability was not caught by any automated tooling, public or private, over an 8-month window. The conclusion — that no effective security SAST covered this feature — holds regardless of whether private tooling exists.
