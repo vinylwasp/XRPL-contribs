@@ -314,15 +314,22 @@ Inner Batch transactions carry **no signatures of their own** by design — `Sig
 |---|---|---|
 | XRP market capitalisation | ~$80–96 billion | CoinMarketCap, multiple media reports |
 | XRPL DeFi TVL | ~$51–55 million | DefiLlama |
-| XRPL RWA value | approaching $300 million | Industry reports, late February 2026 |
+| XRPL total RWA value | ~$1.96–2.3 billion | Ripple exec confirmation (27 Feb), 247WallSt, BitcoinEthereumNews |
+| RLUSD stablecoin (total) | ~$1.56 billion | U.Today, Phemex, CoinPaprika (multiple independent) |
+| RLUSD on XRPL specifically | ~$348–360 million | ~23% of total supply on-chain (CryptoSlate chain-split reporting) |
+| U.S. Treasury tokens (Ondo OUSG, Guggenheim, OpenEden) | ~$300 million | The Crypto Basic (23 Feb 2026) |
+| Justoken JMWH energy tokens | ~$861 million | Largest single RWA on XRPL; launched mid-January 2026 |
+| Ctrl Alt diamond tokens | ~$280 million | The Coin Republic; Ripple/Billiton Diamond deal confirmed 28 Feb |
+
+Additional issued assets at risk include Société Générale's EURCV euro stablecoin (MiCA-compliant, launched on XRPL February 2026), Circle's USDC (natively available on XRPL), and multiple additional stablecoins (EUROP, USDB, XSGD). Individual on-chain supply figures for these are not publicly reported, but they contribute to the aggregate exposure.
 
 The vulnerability was **universal** — every funded account on the XRPL was equally vulnerable regardless of its security configuration. An attacker could have automated mass drainage limited only by XRPL's transaction throughput (~1,500 TPS). `SetRegularKey` takeovers would have been **persistent**, surviving the emergency code fix and requiring individual account-by-account remediation by every affected user.
 
-The media framing of "$80 billion at risk" is directionally accurate. The exploit was mechanically simple, universally applicable, and had no mitigating controls. The only thing between a working exploit and mainnet activation was one more validator vote and an external researcher who happened to be analysing the right code at the right time.
+The combined exposure — $80B+ in XRP, $2.3B in tokenised RWAs, $1.56B in RLUSD, and all DEX/AMM positions — represents the total blast radius. The media framing of "$80 billion at risk" captures the XRP market cap but understates the full scope of issued assets, stablecoins, and tokenised real-world assets that were equally exposed. The exploit was mechanically simple, universally applicable, and had no mitigating controls. The only thing between a working exploit and mainnet activation was one more validator vote and an external researcher who happened to be analysing the right code at the right time.
 
 ### Severity scoring — CWSS v1.0.1
 
-The vulnerability is classified as **CWE-305: Authentication Bypass by Primary Weakness**. The following CWSS (Common Weakness Scoring System) assessment uses MITRE's v1.0.1 methodology.
+The vulnerability is classified as **CWE-305: Authentication Bypass by Primary Weakness**. The following CWSS (Common Weakness Scoring System) assessment uses MITRE's v1.0.1 methodology — the current version as of March 2026. CWSS has not been updated since September 2014; the version numbers sometimes confused with "CWSS 4" refer to the CWE *list* versioning (currently v4.17–4.19), not the scoring system itself. CWSS v1.0.1 remains the canonical weakness scoring framework published by MITRE ([source](https://cwe.mitre.org/cwss/cwss_v1.0.1.html)).
 
 **Vector:**
 
