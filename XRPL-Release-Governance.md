@@ -1,7 +1,7 @@
 # XRPL Release Governance Framework
 
-**Version:** 1.0 draft
-**Date:** 2026-03-03
+**Version:** 1.1 draft
+**Date:** 2026-03-05
 **Author:** Vinylwasp
 **Status:** Proposal
 **Scope:** rippled (consensus node), XRPL-Standards (specifications), client libraries (xrpl.js, xrpl-py, xrpl4j)
@@ -10,7 +10,7 @@
 
 ## Executive Summary
 
-The XLS-0056 Batch amendment vulnerability — an authentication bypass that reached the validator voting stage one vote from mainnet activation — exposed systemic gaps in XRPL's development lifecycle: no threat modelling, self-merges on security-critical code, closed review loops, and no structured security evidence available to validators before voting. This framework defines a gate-based release governance model that prescribes **what evidence** must exist at each stage, **who** is responsible, and **how** decisions are made — while respecting XRPL's architecture where code is built by a core maintainer team but amendment activation is governed by decentralised validator voting. The framework is tool-agnostic, open to community participation at every stage, and designed for phased adoption.
+The XLS-0056 Batch amendment vulnerability — an authentication bypass that reached the validator voting stage one vote from mainnet activation — exposed systemic gaps in XRPL's development lifecycle: no threat modelling, self-merges on security-critical code, closed review loops, no structured security evidence available to validators before voting, and no requirement for live-network testing before amendments reach production. This framework defines a gate-based release governance model that prescribes **what evidence** must exist at each stage, **who** is responsible, and **how** decisions are made — while respecting XRPL's architecture where code is built by a core maintainer team but amendment activation is governed by decentralised validator voting. The framework is tool-agnostic, open to community participation at every stage, and designed for phased adoption.
 
 ---
 
@@ -59,7 +59,7 @@ Contributions are attributed and rewarded. Threat model contributions, adversari
 
 The XRPL has a two-phase release model that this framework must respect:
 
-**Phase A — Maintainer Controlled Build Pipeline**
+**Phase A — Centralised Build Pipeline (maintainer-controlled)**
 
 Code is proposed (by anyone — core team or external contributor), reviewed, merged, and compiled into a `rippled` binary. This phase is a traditional software development process governed by the maintainer team. The gates in this framework (Gates 0–4) apply here and can be enforced through repository policy, CI/CD, and maintainer discipline.
 
@@ -67,7 +67,7 @@ Code is proposed (by anyone — core team or external contributor), reviewed, me
 
 New protocol features are gated behind amendments. Validators independently decide whether to vote YES on an amendment. When ≥80% of validators vote YES for two consecutive weeks, the amendment activates irreversibly on mainnet. No single entity controls this — it is a sovereign decision by each validator operator.
 
-**Implication:** This framework cannot mandate validator behaviour. Gate 5 (Amendment Activation) provides validators with structured security evidence and guidance to support informed voting decisions. The evidence pack is an **input to decentralised governance**, not a centralised approval gate.
+**Implication:** This framework cannot mandate validator behaviour. Gate 6 (Amendment Activation) provides validators with structured security evidence and guidance to support informed voting decisions. The evidence pack is an **input to decentralised governance**, not a centralised approval gate.
 
 ### Amendment Lifecycle Mapping
 
@@ -77,8 +77,9 @@ New protocol features are gated behind amendments. Validators independently deci
 | Security analysis of proposed design | Gate 1 — Threat Model |
 | Code implementation and PR review | Gate 2 — Implementation Review |
 | Testing, static analysis, fuzzing | Gate 3 — Verification |
-| Binary build and release | Gate 4 — Release Candidate |
-| Validator voting on amendment | Gate 5 — Amendment Activation Evidence |
+| Testnet deployment, bug bounty, independent testing | Gate 4 — Testnet Validation |
+| Binary build and release | Gate 5 — Release Candidate |
+| Validator voting on amendment | Gate 6 — Amendment Activation Evidence |
 
 ---
 
@@ -90,9 +91,9 @@ Not every change requires a full threat model. Classification determines which g
 
 | Class | Description | Examples | Mandatory Gates |
 |---|---|---|---|
-| **A — Consensus / Cryptographic** | Changes to consensus logic, transaction validation, signing, key derivation, or amendment activation | Batch transactions, signature validation changes, new transaction types that modify ledger state, cryptographic primitive changes | 0, 1, 2, 3, 4, 5 |
-| **B — Protocol / Ledger State** | Changes to ledger objects, protocol fields, serialisation, or network message handling that do not alter consensus rules | New ledger entry types, RPC method additions, peer protocol changes | 0, 1 (scoped), 2, 3, 4, 5 |
-| **C — Client / Integration** | SDK changes, client library updates, tooling | New xrpl.js methods, documentation, client-side validation | 0, 2, 3, 4 |
+| **A — Consensus / Cryptographic** | Changes to consensus logic, transaction validation, signing, key derivation, or amendment activation | Batch transactions, signature validation changes, new transaction types that modify ledger state, cryptographic primitive changes | 0, 1, 2, 3, 4, 5, 6 |
+| **B — Protocol / Ledger State** | Changes to ledger objects, protocol fields, serialisation, or network message handling that do not alter consensus rules | New ledger entry types, RPC method additions, peer protocol changes | 0, 1 (scoped), 2, 3, 4, 5, 6 |
+| **C — Client / Integration** | SDK changes, client library updates, tooling | New xrpl.js methods, documentation, client-side validation | 0, 2, 3, 5 |
 | **D — Maintenance** | Bug fixes, dependency updates, refactoring, CI changes, documentation-only | Typo fixes, dependency bumps, test improvements | 2, 3 |
 
 ### Classification Criteria
@@ -115,6 +116,7 @@ The change author proposes a classification in the PR description. A maintainer 
 | **Implementer** | Writes the code (PR author) | — |
 | **Code Reviewer** | Reviews implementation for correctness and security | Must not be the PR author; for Class A/B, at least one reviewer must be independent of the feature team |
 | **Security Reviewer** | Reviews for adversarial resilience, authentication/authorisation correctness, and attack surface | Must not be the PR author or implementer; for Class A, must not be from the same feature team |
+| **Testnet Validation Coordinator** | Manages testnet deployment, bug bounty programme, engagement tracking, and testnet evidence collection | Must not be the sole implementer of the amendment under test |
 | **Release Manager** | Assembles evidence pack, verifies gate compliance, coordinates binary release | Must not be the sole implementer of any Class A feature in the release |
 | **Validator Operator** | Makes sovereign voting decision on amendment activation using available evidence | Independent; not governed by this framework |
 
@@ -129,7 +131,7 @@ The following constraints are non-negotiable for Class A and B changes:
 
 ### Community Participation in Roles
 
-The Security Reviewer and Community Threat Contributor roles are explicitly open to the community. The XRPL Foundation or maintainer team should:
+The Security Reviewer, Community Threat Contributor, and bug bounty participant roles are explicitly open to the community. The XRPL Foundation or maintainer team should:
 
 - Maintain a public list of recognised security contributors
 - Provide structured templates for community threat contributions (see Gate 1)
@@ -258,7 +260,122 @@ Each gate defines: purpose, required evidence, who approves, and pass/fail crite
 
 ---
 
-### Gate 4 — Release Candidate
+### Gate 4 — Testnet Validation
+
+**Purpose:** Validate the amendment under live network conditions with independent adversarial testing before the binary is released to production validators. Produce measurable evidence that the amendment has been subjected to real-world scrutiny beyond the feature team's automated tests.
+
+**Applies to:** Class A (full), Class B (scoped)
+
+#### Why Automated Testing Alone Is Insufficient
+
+Automated tests — even adversarial ones — operate within the test author's imagination. They validate scenarios someone thought to write. A testnet deployment creates conditions that CI cannot replicate:
+
+- **Multi-party interaction**: Different wallets, SDKs, and tools submit transactions independently, creating interaction patterns the feature team didn't anticipate.
+- **Adversarial exploration**: Security researchers probe a running system, not a test harness. They try things the spec doesn't describe.
+- **Integration surface**: Client libraries, wallets, explorers, and DEX interfaces interact with the amendment through their own implementations, exposing integration assumptions that unit tests don't cover.
+- **Time under load**: A soak period reveals stability issues, memory leaks, performance degradation, and state-dependent bugs that only manifest over sustained operation.
+- **Real protocol behaviour**: Consensus, peer propagation, ledger close timing, and validator agreement interact with the amendment in ways that a single-node test environment cannot reproduce.
+
+#### Evidence Requirements
+
+| Evidence Required | Criteria | Class A | Class B |
+|---|---|---|---|
+| **Testnet deployment record** | Amendment force-enabled on testnet with confirmed activation. Deployment date, rippled version, and amendment hash documented. | Required | Required |
+| **Dedicated bug bounty period** | Bug bounty programme specifically scoped to the amendment's attack surface, with clear scope definition, reward tiers, and submission process. Published on recognised platforms and XRPL community channels. | Required (28 days minimum) | Recommended (14 days) |
+| **Evidence of independent tester engagement** | Documented evidence that independent parties (not the feature team) actively tested the amendment. See engagement criteria below. | Required — minimum thresholds defined | Required — qualitative evidence |
+| **Integration test results** | Client libraries (xrpl.js, xrpl-py, xrpl4j) tested against the amendment on testnet. Wallet and explorer compatibility confirmed. Integration test results published. | Required | Required |
+| **Testnet soak period** | Amendment running on testnet for the minimum soak period without consensus failures, crashes, or degraded performance. Monitoring data published. | 28 days | 14 days |
+| **Bug bounty engagement report** | Summary of bounty programme: number of participants, number of submissions, valid findings, findings by severity, resolution status. Published as part of the evidence pack. | Required | Recommended |
+| **Testnet adversarial transaction log** | Sample of adversarial transactions submitted during the bounty period demonstrating the scope of testing performed. Sanitised to remove researcher-identifying information if requested. | Required | Recommended |
+
+#### Evidence of Independent Tester Engagement
+
+This is the critical requirement that prevents the testnet phase from becoming a checkbox exercise. "We ran a bug bounty and nobody submitted anything" is not evidence of security — it is evidence of non-engagement. The gate requires **affirmative evidence that independent parties actively tested the amendment**.
+
+**Engagement criteria for Class A amendments** — at least **three** of the following must be demonstrated:
+
+1. **Bounty programme participation**: A minimum of 5 unique researchers registered or submitted reports (valid or invalid) against the amendment-scoped bounty. A submission of "no issues found after X hours of testing" with a described methodology counts.
+
+2. **Community testing reports**: At least 2 independent testing reports published by parties outside the feature team, describing what was tested, how, and what was found (including null findings). Reports are attributed (or pseudonymously attributed) and published in the XRPL-Standards repository or linked from the evidence pack.
+
+3. **SDK/wallet integration testing**: At least 2 independent wallet or SDK teams have tested their integration against the testnet-enabled amendment and published results.
+
+4. **Adversarial transaction evidence**: Transaction logs on testnet demonstrating that adversarial inputs (malformed transactions, boundary violations, authentication bypass attempts, state confusion scenarios) were submitted by parties other than the feature team.
+
+5. **Security researcher attestation**: At least 1 recognised security researcher or firm has reviewed the amendment on testnet and provided a written attestation (positive, negative, or qualified). "We spent 40 hours on this and found no issues" is valid. "We spent 2 hours and ran out of time" is valid and honestly useful — it tells validators the depth of review.
+
+#### Bug Bounty Design
+
+The amendment-scoped bug bounty should be distinct from the standing XRPL bug bounty programme:
+
+**Scope**: Derived from the Gate 1 threat model. In scope: all identified attack scenarios plus any additional adversarial interactions with the amendment's trust boundaries, integration failures, and denial-of-service vectors specific to the amendment. Out of scope: issues unrelated to the amendment, known issues documented in the threat model's risk acceptance records.
+
+**Reward structure** (Class A amendments):
+
+| Severity | Description | Suggested minimum reward |
+|---|---|---|
+| Critical | Authentication bypass, unauthorised fund movement, consensus failure | $100,000+ |
+| High | Authorisation escalation, significant state corruption, denial of service to validators | $25,000–$100,000 |
+| Medium | Limited state corruption, information disclosure, integration failures causing user-facing risk | $5,000–$25,000 |
+| Low | Edge-case misbehaviour, cosmetic issues, minor integration inconsistencies | $1,000–$5,000 |
+| Informational / participation | Documented null finding with methodology description | $500–$1,000 |
+
+The **informational / participation tier** is deliberate. It incentivises researchers to engage and document their testing methodology even when they find no issues. Five researchers spending 40 hours each and finding nothing is meaningful assurance. Zero researchers engaging is not.
+
+**Timing**: The bug bounty closes **before** the release candidate is built. All critical and high findings must be resolved. The resolution status of all findings is published in the evidence pack.
+
+```
+                                                    Bug bounty findings
+                                                    must be resolved
+                                                    BEFORE this point
+                                                              |
+  Gate 3        Testnet         Bug bounty          Gate 5    v    Gate 6
+  (Verify) --> Deployment --> Period (28d) --> RC Build --> Validator
+                    |                                         Voting
+                    |
+            Amendment force-enabled
+            on testnet
+```
+
+#### Testnet Monitoring
+
+During the soak period, the following metrics should be collected and published:
+
+| Metric | Purpose |
+|---|---|
+| Consensus round completion rate | Detect consensus disruption caused by the amendment |
+| Ledger close time distribution | Detect performance degradation |
+| Validator agreement rate | Detect divergence caused by amendment edge cases |
+| Transaction success/failure rate for amendment-related transaction types | Detect unexpected failures |
+| Memory and CPU utilisation on testnet validators | Detect resource exhaustion |
+| Peer connection stability | Detect network-level issues |
+| Error log analysis | Detect unexpected error conditions |
+
+#### When Engagement Thresholds Are Not Met
+
+If the minimum engagement criteria are not met after the initial bounty period:
+
+1. **Do not waive the gate.** Low engagement is not evidence of security — it is evidence of insufficient scrutiny.
+2. **Diagnose the cause.** Is it rewards? Scope clarity? Infrastructure accessibility? Community awareness?
+3. **Extend and remediate.** Extend the bounty period by 14–28 days while addressing engagement barriers. Increase rewards if necessary. Publish improved testing documentation. Actively recruit through additional channels.
+4. **Escalate if persistent.** If engagement remains below thresholds after extension, raise this as a risk factor in the Gate 6 evidence pack — validators should know the amendment received limited independent scrutiny despite efforts to attract it.
+5. **Document the outcome.** Whether engagement is high, low, or zero, the result is documented honestly in the evidence pack.
+
+**Who approves:** Testnet Validation Coordinator confirms deployment, soak completion, and engagement evidence; Security Reviewer confirms adversarial adequacy of testnet testing
+
+**Failure criteria:**
+- Amendment not deployed to testnet
+- Soak period not met
+- No bug bounty programme for Class A amendment
+- Engagement thresholds not met and not escalated with documented remediation attempts
+- Unresolved critical/high bug bounty findings
+- No integration test results
+
+**XLS-0056 gap:** No testnet validation phase existed. The bug bounty that caught the authentication bypass was running against code already deployed to production validators, in an active voting window, one vote from irreversible activation. The security researcher found the vulnerability in production's anteroom — not in a controlled testing environment with time to respond. A 28-day testnet bounty period would have caught the same vulnerability weeks earlier, on testnet, with zero financial exposure, and the development team would have had a full soak period to fix and re-test instead of a 4-day emergency response.
+
+---
+
+### Gate 5 — Release Candidate
 
 **Purpose:** Ensure the binary release is reproducible, attributable, and accompanied by a complete evidence trail.
 
@@ -269,7 +386,7 @@ Each gate defines: purpose, required evidence, who approves, and pass/fail crite
 | Reproducible build | Build process documented and independently reproducible. Target: SLSA Build Level 2 minimum (scripted build, version-controlled build config, build service generates provenance). |
 | Signed artefacts | Binary and source artefacts are cryptographically signed. Signing key management documented. |
 | Software Bill of Materials (SBOM) | SBOM in SPDX or CycloneDX format listing all dependencies |
-| Evidence pack | Compiled evidence from Gates 0–3 for all changes in the release, with SHA-256 hash of the pack published as a release artefact |
+| Evidence pack | Compiled evidence from Gates 0–4 for all changes in the release, with SHA-256 hash of the pack published as a release artefact |
 | Release notes | Changelog identifying all amendments included, their classifications, and links to evidence |
 
 **Who approves:** Release Manager (must not be the sole implementer of any Class A feature in the release)
@@ -284,7 +401,7 @@ Each gate defines: purpose, required evidence, who approves, and pass/fail crite
 
 ---
 
-### Gate 5 — Amendment Activation Evidence
+### Gate 6 — Amendment Activation Evidence
 
 **Purpose:** Provide validators and the community with structured security evidence to support informed, sovereign voting decisions on amendment activation.
 
@@ -295,7 +412,8 @@ Each gate defines: purpose, required evidence, who approves, and pass/fail crite
 | Evidence Provided to Validators | Contents |
 |---|---|
 | Security attestation summary | One-page document summarising: what the amendment does, what security analysis was performed, what threats were identified and how they were mitigated, what residual risks exist, and what monitoring is recommended post-activation |
-| Link to full evidence pack | Gates 0–4 evidence, publicly accessible |
+| Link to full evidence pack | Gates 0–5 evidence, publicly accessible |
+| Testnet validation summary | Soak period duration, bug bounty engagement metrics, number and severity of findings, resolution status, independent tester engagement evidence |
 | Validator guidance document | Amendment-specific guidance: what validators should test on their own infrastructure, what to monitor after activation, and how to disable the amendment if issues are discovered post-activation |
 | Rollback/disable strategy | Documented procedure for disabling the amendment if a critical issue is discovered after activation, including the expected timeline and coordination mechanism |
 | Community threat model | The full community-contributed threat model from Gate 1, including any unresolved or contested findings |
@@ -324,10 +442,18 @@ Each gate defines: purpose, required evidence, who approves, and pass/fail crite
 | 3 — Verification | Adversarial test matrix and results | Markdown or structured format in repository | Permanent |
 | 3 — Verification | Fuzz target definitions and run summary (Class A) | Repository files + summary document | Permanent |
 | 3 — Verification | Code coverage report | Tool output | Per release cycle |
-| 4 — Release Candidate | SBOM | SPDX or CycloneDX | Per release + 2 years |
-| 4 — Release Candidate | Build provenance record | SLSA provenance format | Per release + 2 years |
-| 5 — Activation Evidence | Security attestation summary | Markdown in XRPL-Standards | Permanent |
-| 5 — Activation Evidence | Validator guidance document | Markdown in XRPL-Standards | Permanent |
+| 4 — Testnet Validation | Testnet deployment record (date, version, amendment hash) | Structured document | Permanent |
+| 4 — Testnet Validation | Bug bounty programme specification (scope, rewards, timeline) | Markdown | Permanent |
+| 4 — Testnet Validation | Bug bounty engagement report (participants, submissions, findings, resolutions) | Markdown | Permanent |
+| 4 — Testnet Validation | Independent testing reports | Markdown or PDF | Permanent |
+| 4 — Testnet Validation | Integration test results (SDK/wallet compatibility) | Structured document | Permanent |
+| 4 — Testnet Validation | Testnet monitoring data (soak period metrics) | Structured data + summary | Per release cycle + 2 years |
+| 4 — Testnet Validation | Adversarial transaction log (sanitised) | Transaction hashes + descriptions | Per release cycle + 2 years |
+| 5 — Release Candidate | SBOM | SPDX or CycloneDX | Per release + 2 years |
+| 5 — Release Candidate | Build provenance record | SLSA provenance format | Per release + 2 years |
+| 6 — Activation Evidence | Security attestation summary | Markdown in XRPL-Standards | Permanent |
+| 6 — Activation Evidence | Testnet validation summary | Markdown in XRPL-Standards | Permanent |
+| 6 — Activation Evidence | Validator guidance document | Markdown in XRPL-Standards | Permanent |
 
 ### Evidence Pack Integrity
 
@@ -335,7 +461,7 @@ Each release evidence pack is hashed (SHA-256) and the hash is published as a re
 
 ### Contributor Attribution in Evidence
 
-All evidence artefacts must credit their contributors. Threat model contributors, security reviewers, adversarial test case authors, and anyone who provided security-relevant input during the development process is named in the evidence pack. This serves both transparency (the community can see who vouched for what) and recognition (contributors receive public credit).
+All evidence artefacts must credit their contributors. Threat model contributors, security reviewers, adversarial test case authors, bug bounty participants, independent testnet testers, and anyone who provided security-relevant input during the development process is named in the evidence pack. This serves both transparency (the community can see who vouched for what) and recognition (contributors receive public credit).
 
 ---
 
@@ -360,29 +486,34 @@ The following table assesses each governance control against the evidence visibl
 | **Adversarial test matrix** | Gate 3 | Absent. Tests verified functional behaviour. No scenarios with non-existent signer accounts, no early-exit validation path testing, no authentication bypass attempts. The combinatorial state space was not systematically explored. | **Critical** |
 | **Fuzz testing** | Gate 3 | No evidence of fuzz targets for Batch transaction parsing or validation. | **Medium** |
 | **Coverage with adversarial adequacy** | Gate 3 | Misleading. PR #5060 reported 94% patch coverage — the vulnerable code was executed but only with correct-path inputs. PR #6069 reported 79.2% with "all modified lines covered." Coverage measured execution, not adversarial exploration. | **High** |
-| **Reproducible build / signed artefacts** | Gate 4 | Not assessed (build infrastructure not in scope of XLS-0056 analysis). | **Medium** |
-| **SBOM** | Gate 4 | Not assessed. | **Low** |
-| **Evidence pack** | Gate 4 | Absent. No compiled evidence pack for the Batch amendment. | **High** |
-| **Security attestation for validators** | Gate 5 | Absent. Validators had no structured security information when voting on the Batch amendment. | **Critical** |
-| **Validator guidance document** | Gate 5 | Absent. No amendment-specific guidance for validators. | **High** |
-| **Rollback/disable strategy** | Gate 5 | Reactive only. PR #6402 (emergency disable) was published 2 days after disclosure. No pre-planned rollback procedure existed. | **High** |
+| **Testnet validation with soak period** | Gate 4 | Absent. No structured testnet validation phase existed. The amendment was not subjected to a dedicated testnet soak period before entering validator voting. | **Critical** |
+| **Amendment-scoped bug bounty on testnet** | Gate 4 | Absent. The bug bounty that caught the vulnerability was running against code already in the validator voting window — one vote from irreversible mainnet activation. No dedicated pre-release bounty period existed. | **Critical** |
+| **Evidence of independent tester engagement** | Gate 4 | Absent. No independent parties tested the amendment on testnet before it reached production. The vulnerability was found by an external researcher during the production voting window, not during a structured pre-release testing phase. | **Critical** |
+| **Integration testing on testnet** | Gate 4 | Absent. No evidence of SDK or wallet integration testing against the amendment before it entered validator voting. | **High** |
+| **Reproducible build / signed artefacts** | Gate 5 | Not assessed (build infrastructure not in scope of XLS-0056 analysis). | **Medium** |
+| **SBOM** | Gate 5 | Not assessed. | **Low** |
+| **Evidence pack** | Gate 5 | Absent. No compiled evidence pack for the Batch amendment. | **High** |
+| **Security attestation for validators** | Gate 6 | Absent. Validators had no structured security information when voting on the Batch amendment. | **Critical** |
+| **Testnet validation summary for validators** | Gate 6 | Absent. No testnet validation data was available to validators. | **Critical** |
+| **Validator guidance document** | Gate 6 | Absent. No amendment-specific guidance for validators. | **High** |
+| **Rollback/disable strategy** | Gate 6 | Reactive only. PR #6402 (emergency disable) was published 2 days after disclosure. No pre-planned rollback procedure existed. | **High** |
 
 ### Summary
 
 | Severity | Count |
 |---|---|
-| Critical | 8 |
-| High | 9 |
+| Critical | 12 |
+| High | 10 |
 | Medium | 2 |
 | Low | 1 |
 
-Of the 20 controls assessed, 8 are rated Critical (control entirely absent for a consensus-level feature) and 9 are rated High (control absent or violated). The XLS-0056 Batch amendment reached the validator voting stage — one vote from irreversible mainnet activation — without passing any of the six gates defined in this framework.
+Of the 25 controls assessed, 12 are rated Critical (control entirely absent for a consensus-level feature) and 10 are rated High (control absent or violated). The XLS-0056 Batch amendment reached the validator voting stage — one vote from irreversible mainnet activation — without passing any of the seven gates defined in this framework.
 
 ---
 
 ## §7 — Adoption Roadmap
 
-This roadmap recognises that XRPL is an open-source project. Changes to the maintainer-controlled build pipeline (Gates 0–4) can be implemented through repository policy. Changes to the validator-side process (Gate 5) require community adoption and cannot be mandated.
+This roadmap recognises that XRPL is an open-source project. Changes to the maintainer-controlled build pipeline (Gates 0–5) can be implemented through repository policy. Changes to the validator-side process (Gate 6) require community adoption and cannot be mandated.
 
 ### Phase 1 — Immediate (0–3 months)
 
@@ -399,7 +530,7 @@ This roadmap recognises that XRPL is an open-source project. Changes to the main
 
 ### Phase 2 — Near-term (3–9 months)
 
-**Goal:** Introduce structured security analysis and community participation in the threat modelling process.
+**Goal:** Introduce structured security analysis, community participation in threat modelling, and testnet validation processes.
 
 | Action | Gate | Effort | Impact |
 |---|---|---|---|
@@ -407,21 +538,26 @@ This roadmap recognises that XRPL is an open-source project. Changes to the main
 | Integrate SAST into CI pipeline using open-source tooling (e.g., CodeQL via GitHub Actions) as a default baseline | Gate 3 | Medium — CI configuration, initial triage of existing findings | Catches known vulnerability patterns automatically |
 | Define adversarial test matrix template and require it for Class A/B changes | Gate 3 | Medium — template, reviewer training | Ensures adversarial path coverage |
 | Create Security Reviewer role with at least 2 recognised individuals independent of the core feature team | Gate 2, 3 | Medium — community recruitment, role definition | Breaks closed review loops |
-| Extend bug bounty programme (or create one) to cover design-stage findings: threat model contributions, spec-level flaws, adversarial scenario discoveries | Gate 1 | Medium — programme design, funding | Incentivises pre-code security analysis |
-| Publish security attestation template for amendment voting | Gate 5 | Low — document template | Gives validators structured information |
+| Define testnet deployment process for amendments, including soak period requirements and monitoring metrics | Gate 4 | Medium — process design, monitoring infrastructure | Establishes the testnet validation phase |
+| Create amendment-scoped bug bounty template: scope definition derived from threat model, reward tiers, engagement criteria, reporting process | Gate 4 | Medium — programme design, platform selection | Enables structured pre-release adversarial testing |
+| Establish engagement tracking and reporting: participation dashboard, triage SLA, evidence collection | Gate 4 | Medium — tooling, process design | Ensures engagement thresholds are measurable and auditable |
+| Publish testnet testing guides and adversarial transaction examples for first Class A amendment | Gate 4 | Medium — documentation, tooling | Lowers barrier to independent tester engagement |
+| Extend bug bounty programme (or create one) to cover design-stage findings: threat model contributions, spec-level flaws, adversarial scenario discoveries | Gate 1, 4 | Medium — programme design, funding | Incentivises pre-code security analysis and testnet participation |
+| Publish security attestation template for amendment voting, including testnet validation summary | Gate 6 | Low — document template | Gives validators structured information |
 
 ### Phase 3 — Target State (9–18 months)
 
-**Goal:** Achieve full framework compliance with reproducible builds, formal evidence packs, and mature community security participation.
+**Goal:** Achieve full framework compliance with reproducible builds, formal evidence packs, mature community security participation, and proven testnet validation processes.
 
 | Action | Gate | Effort | Impact |
 |---|---|---|---|
-| Achieve SLSA Build Level 2 for rippled binary releases (scripted build, build service provenance) | Gate 4 | High — build infrastructure changes | Verifiable build provenance |
-| Publish formal evidence packs for all releases containing Class A/B amendments | Gate 4, 5 | Medium — process discipline, Release Manager role | Complete evidence trail for validators and community |
+| Achieve SLSA Build Level 2 for rippled binary releases (scripted build, build service provenance) | Gate 5 | High — build infrastructure changes | Verifiable build provenance |
+| Publish formal evidence packs for all releases containing Class A/B amendments, including testnet validation evidence | Gate 5, 6 | Medium — process discipline, Release Manager role | Complete evidence trail for validators and community |
 | Establish fuzz testing programme for consensus-critical code paths with continuous fuzzing infrastructure | Gate 3 | High — infrastructure, corpus development | Discovers edge cases that unit tests miss |
+| Pilot Gate 4 (testnet validation) on next Class A amendment with full bug bounty, engagement tracking, and soak period | Gate 4 | High — full process execution, community coordination, bounty funding | Validates the testnet quality gate in practice |
 | Achieve OpenSSF Scorecard targets (branch protection, CI, SAST, signed releases, dependency management) | All | Medium — incremental improvements | Third-party-verifiable security posture |
 | Implement cryptographic review process for any changes to signing, key derivation, or authentication | Gate 2, 3 | Medium — specialist reviewer recruitment | Expert review for the highest-risk code |
-| Publish validator guidance documents for all new amendments entering voting | Gate 5 | Low per amendment — requires process discipline | Informed validator decision-making |
+| Publish validator guidance documents (including testnet validation summaries) for all new amendments entering voting | Gate 6 | Low per amendment — requires process discipline | Informed validator decision-making |
 | Recognise and publicly attribute community security contributors annually (or per-release) | All | Low — community communication | Sustains contributor engagement |
 
 ### Adoption Metrics
@@ -434,8 +570,11 @@ Progress can be measured against these indicators:
 | PRs merged with COMMENTED-only reviews | 0% | 0% |
 | Class A amendments with threat model | — | 100% |
 | Class A amendments with adversarial test matrix | — | 100% |
-| Amendments with published security attestation | — | 100% |
+| Class A amendments with completed testnet soak period | — | 100% |
+| Class A amendments with bug bounty meeting engagement thresholds | — | 100% |
+| Amendments with published security attestation (including testnet summary) | — | 100% |
 | Community threat model contributions per Class A amendment | — | ≥ 3 contributors |
+| Independent testnet testers per Class A amendment | — | ≥ 5 participants |
 | OpenSSF Scorecard score | — | ≥ 7/10 |
 
 ---
@@ -454,11 +593,16 @@ Progress can be measured against these indicators:
 | Static analysis (SAST) | PW.7.1, PW.8.1 | Verification:Security Testing | — | 6.2.4, 6.5.5 | DE.CM | SAST |
 | Adversarial test matrix | PW.8.2 | Verification:Security Testing | — | 6.2.4, 6.5.6 | DE.CM | — |
 | Fuzz testing | PW.8.2 | Verification:Security Testing | — | 6.2.4 | DE.CM | Fuzzing |
+| Testnet soak period | PW.8.1 | Verification:Security Testing L3 | — | 6.2.3 | DE.CM | — |
+| Amendment-scoped bug bounty | PW.8.2 | Verification:Security Testing L3 | — | 6.2.4, 11.3.1 | ID.RA-1 | Vulnerabilities |
+| Independent tester engagement | PW.8.2 | Verification:Security Testing L3 | — | 6.2.4 | ID.RA-1 | Vulnerabilities |
+| Integration testing on testnet | PW.8.2 | Verification:Security Testing | — | 6.2.3 | DE.CM | — |
 | Reproducible build | PO.3.1, PO.3.2 | Implementation:Secure Build | Build L2 | 6.2.3 | PR.DS | — |
 | Signed artefacts | PS.2.1 | Implementation:Secure Build | Build L1 | 6.2.3 | PR.DS | Signed-Releases |
 | SBOM | PS.3.1 | Implementation:Secure Build | — | 6.3.2 | ID.AM | — |
 | Evidence pack | PO.1.1, PW.7.2 | Governance:Strategy & Metrics | Build L2 | 6.5.1 | GV.OC | — |
 | Security attestation for validators | PO.1.1 | Governance:Strategy & Metrics | — | — | GV.OC | — |
+| Testnet validation summary for validators | PO.1.1 | Governance:Strategy & Metrics | — | — | GV.OC | — |
 | Validator guidance | — | Governance:Education & Guidance | — | — | GV.OC | — |
 | Rollback/disable strategy | PW.9.1, PW.9.2 | Operations:Incident Management | — | 6.3.3 | RS.MI | — |
 | Contributor attribution/recognition | — | Governance:Education & Guidance | — | — | GV.RR | Contributors |
@@ -469,7 +613,7 @@ Progress can be measured against these indicators:
 
 ### XRPL-Specific
 
-- [XLS-0056 Batch Amendment — Security SDLC Analysis (Vinywasp, 2026-03-02)](https://github.com/vinylwasp/XRPL-contribs/blob/main/XLS-0056-secure-dev.md) — companion gap analysis document
+- [XLS-0056 Batch Amendment — Security SDLC Analysis (Vitruvius, 2026-03-02)](https://github.com/vinylwasp/XRPL-contribs/blob/main/XLS-0056-secure-dev.md) — companion gap analysis document
 - [XLS-0056 Specification](https://github.com/XRPLF/XRPL-Standards/tree/master/XLS-0056-batch)
 - [XRPL-Standards PR #452 — Integration Considerations](https://github.com/XRPLF/XRPL-Standards/pull/452)
 - [rippled PR #5060 — Batch (XLS-56)](https://github.com/XRPLF/rippled/pull/5060)
