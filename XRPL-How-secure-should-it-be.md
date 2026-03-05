@@ -11,7 +11,7 @@
 
 The XRP Ledger is no longer an experiment. It is a production financial platform securing tens of billions of dollars in assets, processing payments for 300+ financial institutions, and positioning itself as the infrastructure layer for the next generation of global finance.
 
-The question is not whether the XRPL *is* secure. The question is whether it is secure *enough* for what it has become — and what it is becoming.
+The question is not whether the XRPL *is* secure. The question is whether it is secure *enough* for what it has become, and what it is becoming.
 
 This document examines what the XRPL protects, what it aspires to become, what organisations protecting comparable value do for security, and where the gaps are.
 
@@ -29,7 +29,7 @@ This document examines what the XRPL protects, what it aspires to become, what o
 | **Other stablecoins** | Growing | EURCV (Societe Generale, MiCA-compliant), USDC (Circle, native), XSGD (StraitsX), EUROP, USDB |
 | **DEX and AMM** | ~$47 million TVL | 22,000+ AMM pools; native order book DEX |
 
-The combined assets on the XRPL exceed $90 billion. Every one of them — the XRP, the stablecoins, the tokenised treasuries, the diamond certificates, the energy tokens — depends on the same consensus protocol, the same transaction validation logic, and the same amendment governance process.
+The combined assets on the XRPL exceed $90 billion. Every one of them (the XRP, the stablecoins, the tokenised treasuries, the diamond certificates, the energy tokens) depends on the same consensus protocol, the same transaction validation logic, and the same amendment governance process.
 
 ### The Businesses
 
@@ -38,7 +38,7 @@ The XRPL is not just a ledger. It is the foundation for an ecosystem of regulate
 - **Ripple Payments** processes $15 billion per month in cross-border transactions across 300+ financial institutions in 55+ countries. Approximately 40% of these transactions use XRP for on-demand liquidity.
 - **Hidden Road** (acquired by Ripple for $1.25 billion) clears approximately $3 trillion annually for 300+ institutional clients and went live on DTCC's National Securities Clearing Corporation on 2 March 2026.
 - **Ripple Custody** provides institutional-grade digital asset custody with Ethereum and Solana staking capabilities.
-- **Aviva Investors** is tokenising traditional fund structures directly on the XRPL — the first major traditional asset manager to build on the ledger.
+- **Aviva Investors** is tokenising traditional fund structures directly on the XRPL, the first major traditional asset manager to build on the ledger.
 - **SBI Holdings** operates SBI Ripple Asia and is launching RLUSD in Japan, with blockchain-based retail bonds on the Osaka Digital Exchange.
 - **Archax** targets $1 billion in tokenised assets on the XRPL by mid-2026.
 
@@ -53,7 +53,7 @@ Ripple's stated ambition is not modest. The company is positioning the XRP Ledge
 - **Replace SWIFT.** Ripple explicitly targets SWIFT's $150 trillion per year in cross-border payment flows. XRP settles in 3.5 seconds at 1,500+ TPS versus SWIFT's 24+ hour settlement at 5-7 TPS.
 - **The Internet of Value.** XRP as a neutral bridge asset enabling interoperability between all currencies, including central bank digital currencies (CBDCs). Ripple has active CBDC partnerships with Palau, Bhutan, Montenegro, and Hong Kong.
 - **"All the money."** Ripple targets the $120 trillion corporate treasury market (via its GTreasury acquisition), the global repo market, and institutional DeFi.
-- **Institutional tokenisation.** The partnership pipeline — Ondo, Guggenheim, OpenEden, Archax, Aviva, Ctrl Alt — signals a strategy to make the XRPL the default rail for tokenised real-world assets.
+- **Institutional tokenisation.** The partnership pipeline (Ondo, Guggenheim, OpenEden, Archax, Aviva, Ctrl Alt) signals a strategy to make the XRPL the default rail for tokenised real-world assets.
 
 Ripple holds 75+ global licenses and registrations, including a conditional OCC national bank charter (the first for a crypto-native company), an EU EMI license with passporting across all 27 member states, an FCA crypto registration, and an expanded MAS Major Payment Institution license. It raised $500 million at a $40-50 billion valuation with investors including Citadel Securities. PitchBook assigns a 96% IPO probability.
 
@@ -73,7 +73,7 @@ Visa processed $17 trillion in payment volume in FY2025 across 329 billion trans
 
 ### SWIFT
 
-SWIFT transmits over 47 million financial messages per day, facilitating approximately $150 trillion per year in cross-border payments across 11,000+ institutions. After the 2016 Bangladesh Bank heist exposed endpoint security failures, SWIFT created the Customer Security Programme with 32 mandatory and advisory controls. Every SWIFT member must complete an annual independent security assessment — self-assessment alone is marked non-compliant. SWIFT is overseen by the National Bank of Belgium with cooperative oversight from G10 central banks.
+SWIFT transmits over 47 million financial messages per day, facilitating approximately $150 trillion per year in cross-border payments across 11,000+ institutions. After the 2016 Bangladesh Bank heist exposed endpoint security failures, SWIFT created the Customer Security Programme with 32 mandatory and advisory controls. Every SWIFT member must complete an annual independent security assessment; self-assessment alone is marked non-compliant. SWIFT is overseen by the National Bank of Belgium with cooperative oversight from G10 central banks.
 
 ### DTCC
 
@@ -81,7 +81,7 @@ The DTCC holds over $100 trillion in assets under custody and clears up to $13.2
 
 ### NYSE / ICE
 
-The NYSE is the world's largest stock exchange by listed market capitalisation (~$25 trillion). It operates under SEC Regulation SCI, which mandates annual compliance reviews, penetration testing at least every three years, risk-based system assessments, and immediate SEC notification for any system event. In 2021, a threat actor inserted malicious code into an ICE VPN device. ICE was fined $10 million — not for the breach, but for failing to report it within the required timeframe. The penalty was for the process failure, not the technical failure.
+The NYSE is the world's largest stock exchange by listed market capitalisation (~$25 trillion). It operates under SEC Regulation SCI, which mandates annual compliance reviews, penetration testing at least every three years, risk-based system assessments, and immediate SEC notification for any system event. In 2021, a threat actor inserted malicious code into an ICE VPN device. ICE was fined $10 million, not for the breach, but for failing to report it within the required timeframe. The penalty was for the process failure, not the technical failure.
 
 ### The Pattern
 
@@ -127,9 +127,9 @@ These are real security properties. They are the reason the XRPL has operated fo
 
 ### What the XRPL Lacks
 
-What the XRPL lacks is not technical capability. It is security governance — the structured processes that ensure the technical capability is applied consistently and that vulnerabilities are found before they reach production.
+What the XRPL lacks is not technical capability. It is security governance: the structured processes that ensure the technical capability is applied consistently and that vulnerabilities are found before they reach production.
 
-There is a subtler risk, too. Security posture does not only erode through dramatic failures — it erodes incrementally, one amendment at a time, through what might be called *amendment creep*. Each new feature widens the attack surface. Each new transaction type adds authentication paths, state transitions, and edge cases that must be defended in perpetuity. If validators treat amendment votes as routine approvals rather than consequential security decisions, the cumulative effect is a slow, silent weakening of the protocol's defences. Any reduction in the strength of existing security controls should be a deliberate, documented choice — not an unexamined side-effect of enthusiasm for new functionality. Validators hold the only veto in the XRPL's governance model. When they vote to activate an amendment, they are not simply endorsing a feature — they are accepting permanent responsibility for every security consequence that follows. That responsibility deserves the same rigour that a bank regulator applies to a rule change, not a reflexive yes to the latest proposal.
+There is a subtler risk, too. Security posture does not only erode through dramatic failures; it erodes incrementally, one amendment at a time, through what might be called *amendment creep*. Each new feature widens the attack surface. Each new transaction type adds authentication paths, state transitions, and edge cases that must be defended in perpetuity. If validators treat amendment votes as routine approvals rather than consequential security decisions, the cumulative effect is a slow, silent weakening of the protocol's defences. Any reduction in the strength of existing security controls should be a deliberate, documented choice, not an unexamined side-effect of enthusiasm for new functionality. Validators hold the only veto in the XRPL's governance model. When they vote to activate an amendment, they are not simply endorsing a feature; they are accepting permanent responsibility for every security consequence that follows. That responsibility deserves the same rigour that a bank regulator applies to a rule change, not a reflexive yes to the latest proposal.
 
 - **No mandatory security framework.** Visa has PCI DSS. SWIFT has CSCF. DTCC has CPMI-IOSCO. NYSE has Regulation SCI. The XRPL has no equivalent framework governing how code changes, security testing, or vulnerability management are conducted.
 
@@ -153,7 +153,7 @@ The XRPL does not operate in a benign environment. The blockchain threat landsca
 
 - **North Korea's Lazarus Group** stole $2.02 billion in cryptocurrency in 2025 alone, accounting for 76% of all crypto service compromises. Their operational tempo increased 40% year-over-year. The FATF designated North Korea as "the most severe state-based threat to the integrity of crypto markets." Their techniques include supply chain compromise, social engineering via fake job offers, and cloud infrastructure hijacking.
 
-- **The Bybit hack** (February 2025) resulted in a $1.5 billion loss — the largest cryptocurrency theft in history — via a supply chain compromise of a developer workstation that led to a JavaScript injection in the signing UI.
+- **The Bybit hack** (February 2025) resulted in a $1.5 billion loss, the largest cryptocurrency theft in history, via a supply chain compromise of a developer workstation that led to a JavaScript injection in the signing UI.
 
 - **The xrpl.js supply chain attack** (April 2025) compromised a maintainer's npm credentials via phishing, injecting a backdoor into the official XRPL JavaScript library that exfiltrated private keys. The library had 135,000+ weekly downloads.
 
@@ -161,7 +161,7 @@ The XRPL does not operate in a benign environment. The blockchain threat landsca
 
 These are not theoretical threats. They are documented incidents affecting the XRPL ecosystem and its peers. The adversaries are nation-state-level operators with demonstrated capability, persistence, and billion-dollar track records.
 
-A companion document — [XRPL STRIDE Threat Model](XRPL-STRIDE-Threat-Model.md) — provides a systematic decomposition of threats to the XRPL protocol using the STRIDE methodology, mapped to MITRE ATT&CK, AADAPT, and ATLAS frameworks.
+A companion document, [XRPL STRIDE Threat Model](XRPL-STRIDE-Threat-Model.md), provides a systematic decomposition of threats to the XRPL protocol using the STRIDE methodology, mapped to MITRE ATT&CK, AADAPT, and ATLAS frameworks.
 
 ---
 
@@ -189,13 +189,13 @@ How secure should the XRPL be?
 
 **As secure as the value it protects demands.**
 
-If the XRPL protects $90 billion in assets today, it should have security governance proportionate to a $90 billion financial infrastructure. If it aspires to handle $150 trillion in cross-border payments — as Ripple's SWIFT replacement ambition implies — it should have security governance proportionate to that.
+If the XRPL protects $90 billion in assets today, it should have security governance proportionate to a $90 billion financial infrastructure. If it aspires to handle $150 trillion in cross-border payments (as Ripple's SWIFT replacement ambition implies) it should have security governance proportionate to that.
 
 This does not mean the XRPL needs to replicate a bank's organisational structure. It cannot and should not. Decentralisation is a feature, not a bug.
 
 But decentralisation is not a substitute for security governance. The XRPL can be decentralised *and* have:
 
-- **A mandatory security evidence pack** for amendments entering validator voting — threat models, adversarial test results, independent review attestations
+- **A mandatory security evidence pack** for amendments entering validator voting, including threat models, adversarial test results, independent review attestations
 - **Structured testnet validation** with amendment-scoped bug bounties before code reaches the mainnet voting window
 - **Independent security review** of consensus-critical code by parties outside the feature development team
 - **A defined threat modelling process** for protocol changes, open to community participation
@@ -216,11 +216,11 @@ Validators can change this by adopting a simple principle:
 
 **In the absence of security evidence, vote no.**
 
-If an amendment has no threat model — vote no. If it has no adversarial test matrix — vote no. If the code was self-merged — vote no. If no independent security review occurred — vote no.
+If an amendment has no threat model, vote no. If it has no adversarial test matrix, vote no. If the code was self-merged, vote no. If no independent security review occurred, vote no.
 
 This is not obstructionism. This is the standard applied to every production change at every financial institution listed in this document. An amendment that cannot survive security scrutiny should not consume protocol complexity and validator trust.
 
-The XRPL has earned its place in the financial system through technical innovation and a decade of reliable operation. The next chapter — regulated stablecoins, tokenised treasuries, institutional DeFi, SWIFT-scale payment flows — requires security governance that matches the ambition.
+The XRPL has earned its place in the financial system through technical innovation and a decade of reliable operation. The next chapter (regulated stablecoins, tokenised treasuries, institutional DeFi, SWIFT-scale payment flows) requires security governance that matches the ambition.
 
 The infrastructure exists. The community exists. The question is whether the discipline follows.
 
@@ -228,27 +228,27 @@ The infrastructure exists. The community exists. The question is whether the dis
 
 ## Companion Documents
 
-- [XRPL STRIDE Threat Model](XRPL-STRIDE-Threat-Model.md) — Systematic threat decomposition of the XRPL protocol
+- [XRPL STRIDE Threat Model](XRPL-STRIDE-Threat-Model.md): Systematic threat decomposition of the XRPL protocol
 
 ## Sources
 
-- [CoinMarketCap — XRP](https://coinmarketcap.com/currencies/xrp/)
-- [CoinLaw — RLUSD Statistics](https://coinlaw.io/rlusd-statistics/)
-- [24/7 Wall St — XRPL Tokenized Assets](https://247wallst.com/investing/2026/02/27/xrpl-has-added-more-tokenized-assets-in-2-months-than-all-of-2025-why-isnt-xrp-price-reacting/)
-- [CoinLaw — Ripple Statistics](https://coinlaw.io/ripple-labs-statistics/)
-- [CCN — Beyond XRP Price: Ripple 2026](https://www.ccn.com/education/crypto/beyond-xrp-price-ripple-2026-matters/)
-- [Yahoo Finance — Hidden Road DTCC](https://finance.yahoo.com/news/hidden-road-officially-goes-live-052823575.html)
+- [CoinMarketCap, XRP](https://coinmarketcap.com/currencies/xrp/)
+- [CoinLaw, RLUSD Statistics](https://coinlaw.io/rlusd-statistics/)
+- [24/7 Wall St, XRPL Tokenized Assets](https://247wallst.com/investing/2026/02/27/xrpl-has-added-more-tokenized-assets-in-2-months-than-all-of-2025-why-isnt-xrp-price-reacting/)
+- [CoinLaw, Ripple Statistics](https://coinlaw.io/ripple-labs-statistics/)
+- [CCN, Beyond XRP Price: Ripple 2026](https://www.ccn.com/education/crypto/beyond-xrp-price-ripple-2026-matters/)
+- [Yahoo Finance, Hidden Road DTCC](https://finance.yahoo.com/news/hidden-road-officially-goes-live-052823575.html)
 - [Visa FY2025 Earnings](https://s1.q4cdn.com/050606653/files/doc_financials/2025/q4/Q4-2025-Earnings-Release_vF.pdf)
 - [Visa Cybersecurity Investment](https://www.paymentsdive.com/news/visa-investment-cybersecurity-threats-fraud-scams/709878/)
 - [SWIFT Customer Security Programme](https://www.swift.com/myswift/customer-security-programme-csp/security-controls)
 - [SWIFT Traffic Highlights](https://www.swift.com/about-us/swift-traffic-highlights)
 - [DTCC Operational Resilience](https://www.dtcc.com/operational-resilience)
 - [DTCC CPMI-IOSCO Disclosures](https://www.dtcc.com/-/media/Files/Downloads/legal/policy-and-compliance/CPMI-IOSCO-Public-Quantitative-Disclosures---Q3-2025.pdf)
-- [SEC — Regulation SCI](https://www.sec.gov/rules-regulations/2015/12/regulation-systems-compliance-integrity)
-- [SEC — ICE $10M Penalty](https://www.sec.gov/newsroom/press-releases/2024-63)
+- [SEC, Regulation SCI](https://www.sec.gov/rules-regulations/2015/12/regulation-systems-compliance-integrity)
+- [SEC, ICE $10M Penalty](https://www.sec.gov/newsroom/press-releases/2024-63)
 - [Crypto Hackers Stole $3.4B in 2025](https://blockchain.news/news/crypto-hackers-stole-3-4b-2025-north-korea-lazarus-group)
 - [North Korea $2.02B Crypto Theft 2025](https://thehackernews.com/2025/12/north-korea-linked-hackers-steal-202.html)
-- [Bybit Hack Technical Analysis — NCC Group](https://www.nccgroup.com/research-blog/in-depth-technical-analysis-of-the-bybit-hack/)
+- [Bybit Hack Technical Analysis, NCC Group](https://www.nccgroup.com/research-blog/in-depth-technical-analysis-of-the-bybit-hack/)
 - [XRPL xrpl.js Supply Chain Attack](https://xrpl.org/blog/2025/vulnerabilitydisclosurereport-bug-apr2025)
 - [XRPL Consensus Protections](https://xrpl.org/docs/concepts/consensus-protocol/consensus-protections)
 - [MITRE ATT&CK](https://attack.mitre.org/)

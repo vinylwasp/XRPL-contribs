@@ -1,4 +1,4 @@
-# XRPL Protocol — STRIDE Threat Model
+# XRPL Protocol: STRIDE Threat Model
 
 **Date:** 2026-03-05
 **Author:** Vinylwasp
@@ -65,16 +65,16 @@
 
 Threats to the XRPL come from adversaries with varying levels of sophistication, resources, and motivation. The following tiers reflect the observed capability spectrum in the blockchain threat landscape, calibrated against real-world incidents and MITRE ATT&CK threat actor data.
 
-### Tier 1 — Opportunistic
+### Tier 1: Opportunistic
 
 **Profile:** Script kiddies, low-skill criminals, automated scanners.
 **Resources:** Individual or small group; public tools and exploits.
 **Motivation:** Financial gain, notoriety.
-**Blockchain examples:** Nomad Bridge mass exploitation (August 2022) — once the initial exploit was public, hundreds of opportunistic actors copied the transaction pattern.
+**Blockchain examples:** Nomad Bridge mass exploitation (August 2022). Once the initial exploit was public, hundreds of opportunistic actors copied the transaction pattern.
 **Relevant techniques:** [T1190](https://attack.mitre.org/techniques/T1190/) (public-facing app exploits), [T1078](https://attack.mitre.org/techniques/T1078/) (credential stuffing), [T1059](https://attack.mitre.org/techniques/T1059/) (scripting), [T1566](https://attack.mitre.org/techniques/T1566/) (mass phishing).
 **XRPL threat level:** Low for consensus; moderate for individual account compromise and ecosystem tooling.
 
-### Tier 2 — Targeted Criminal
+### Tier 2: Targeted Criminal
 
 **Profile:** Organised cybercrime groups with specific targets and developed tradecraft.
 **Resources:** Funded teams; custom tooling; targeted reconnaissance.
@@ -83,16 +83,16 @@ Threats to the XRPL come from adversaries with varying levels of sophistication,
 **Relevant techniques:** [T1566.002](https://attack.mitre.org/techniques/T1566/002/) (spear-phishing), [T1078.004](https://attack.mitre.org/techniques/T1078/004/) (cloud account compromise), [T1195](https://attack.mitre.org/techniques/T1195/) (supply chain), [T1021](https://attack.mitre.org/techniques/T1021/) (remote services).
 **XRPL threat level:** Moderate. Targeted attacks on validator operators, ecosystem developers, or high-value accounts.
 
-### Tier 3 — Organised / State-Proxy
+### Tier 3: Organised / State-Proxy
 
 **Profile:** Sophisticated criminal organisations or state-proxied groups with operational security discipline.
 **Resources:** Custom malware, counter-forensics, long-term campaigns.
 **Motivation:** Large-scale financial theft, strategic disruption.
-**Blockchain examples:** Lazarus Group / TraderTraitor (DPRK) — $6.75B cumulative theft; responsible for Ronin ($625M), Bybit ($1.5B), and numerous supply chain attacks.
+**Blockchain examples:** Lazarus Group / TraderTraitor (DPRK), responsible for $6.75B cumulative theft; responsible for Ronin ($625M), Bybit ($1.5B), and numerous supply chain attacks.
 **Relevant techniques:** [T1195.001](https://attack.mitre.org/techniques/T1195/001/)/[.002](https://attack.mitre.org/techniques/T1195/002/) (supply chain), [T1556](https://attack.mitre.org/techniques/T1556/) (modify auth), [T1027](https://attack.mitre.org/techniques/T1027/) (obfuscation), [T1562](https://attack.mitre.org/techniques/T1562/) (impair defenses), [T1557](https://attack.mitre.org/techniques/T1557/) (adversary-in-the-middle).
 **XRPL threat level:** High. The XRPL's $90B+ asset base makes it a prime target. The xrpl.js supply chain attack (April 2025) demonstrated this threat actor tier's interest in the XRPL ecosystem.
 
-### Tier 4 — State-Directed
+### Tier 4: State-Directed
 
 **Profile:** Nation-state intelligence agencies with strategic objectives.
 **Resources:** Zero-day capabilities, firmware/hardware implants, BGP-level network control, long-term persistent access.
@@ -178,7 +178,7 @@ Tampering threats involve unauthorised modification of data, code, or protocol b
 | Field | Detail |
 |---|---|
 | **Target** | C2 (Transaction Engine), C7 (Amendment Governance), TB4 (Amendment → Protocol) |
-| **Description** | A vulnerability in new amendment code alters transaction processing in unintended ways — authentication bypasses, incorrect state transitions, or logic errors. |
+| **Description** | A vulnerability in new amendment code alters transaction processing in unintended ways, including authentication bypasses, incorrect state transitions, or logic errors. |
 | **ATT&CK** | [T1195.002](https://attack.mitre.org/techniques/T1195/002/) (Supply Chain: Software Supply Chain), [T1556](https://attack.mitre.org/techniques/T1556/) (Modify Authentication Process) |
 | **AADAPT** | [ADT3013](https://aadapt.mitre.org/techniques/ADT3013/) (Exploit Blockchain Technology Specific Vulnerabilities) |
 | **Preconditions** | Vulnerable code passes review and testing; amendment activates on mainnet |
@@ -203,7 +203,7 @@ Tampering threats involve unauthorised modification of data, code, or protocol b
 | Field | Detail |
 |---|---|
 | **Target** | C2 (Transaction Engine), C9 (DEX and AMM) |
-| **Description** | Attacker crafts transactions that exploit parsing, validation, or execution logic to achieve unintended outcomes — partial payment confusion, path manipulation, DEX front-running. |
+| **Description** | Attacker crafts transactions that exploit parsing, validation, or execution logic to achieve unintended outcomes, such as partial payment confusion, path manipulation, and DEX front-running. |
 | **ATT&CK** | [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application), [T1565](https://attack.mitre.org/techniques/T1565/) (Data Manipulation) |
 | **AADAPT** | [ADT3021.003](https://aadapt.mitre.org/techniques/ADT3021/003/) (Market Manipulation: Wash Trading), [ADT3013](https://aadapt.mitre.org/techniques/ADT3013/) |
 | **Preconditions** | Knowledge of protocol internals; ability to submit transactions |
@@ -317,7 +317,7 @@ Denial of service threats aim to disrupt the availability of the XRPL network or
 | **Description** | Attacker disrupts consensus by taking >20% of UNL validators offline (liveness attack) or causing validation drift. |
 | **ATT&CK** | [T1499](https://attack.mitre.org/techniques/T1499/) (Endpoint Denial of Service), [T1498](https://attack.mitre.org/techniques/T1498/) (Network Denial of Service) |
 | **Preconditions** | Ability to disrupt validator connectivity or crash validator processes |
-| **Impact** | Network halt (fail-safe — no invalid transactions). The XRPL experienced a 64-minute halt in February 2025 due to validation drift. |
+| **Impact** | Network halt (fail-safe; no invalid transactions). The XRPL experienced a 64-minute halt in February 2025 due to validation drift. |
 | **Existing mitigations** | Negative UNL mechanism excludes offline validators from quorum; network fails safe (halts rather than processing invalid transactions) |
 | **Gaps** | No coordinated resilience testing programme; no defined recovery playbook; manual validator intervention required during February 2025 halt |
 
@@ -382,7 +382,7 @@ Elevation of privilege threats involve an attacker gaining capabilities beyond w
 | Field | Detail |
 |---|---|
 | **Target** | C7 (Amendment Governance), TB4 (Amendment → Protocol) |
-| **Description** | Attacker influences the amendment process to activate malicious or vulnerable code — through social engineering of validators, compromise of validator keys, or introduction of subtle vulnerabilities in amendment code. |
+| **Description** | Attacker influences the amendment process to activate malicious or vulnerable code, whether through social engineering of validators, compromise of validator keys, or introduction of subtle vulnerabilities in amendment code. |
 | **ATT&CK** | [T1199](https://attack.mitre.org/techniques/T1199/) (Trusted Relationship), [T1566](https://attack.mitre.org/techniques/T1566/) (Phishing) |
 | **ATLAS** | [AML.T0048](https://atlas.mitre.org/techniques/AML.T0048) (AI-enhanced Social Engineering) |
 | **Preconditions** | Ability to influence >80% of UNL validators' votes, or ability to introduce vulnerable code that passes review |
@@ -419,12 +419,12 @@ Elevation of privilege threats involve an attacker gaining capabilities beyond w
 | Field | Detail |
 |---|---|
 | **Target** | C3 (Cryptographic Subsystem), TB6 (Signer → Account) |
-| **Description** | Attacker exploits signer list configuration — misconfigured weights, compromised subset of signers, or (in nested multi-sign) quorum relaxation — to sign transactions with fewer authorisations than the account holder intended. |
+| **Description** | Attacker exploits signer list configuration (misconfigured weights, compromised subset of signers, or, in nested multi-sign, quorum relaxation) to sign transactions with fewer authorisations than the account holder intended. |
 | **ATT&CK** | [T1098](https://attack.mitre.org/techniques/T1098/) (Account Manipulation), [T1078](https://attack.mitre.org/techniques/T1078/) (Valid Accounts) |
 | **Preconditions** | Quorum misconfiguration or compromise of sufficient signer keys |
 | **Impact** | Transactions signed below intended security threshold; account compromise |
 | **Existing mitigations** | Explicit quorum and weight configuration; maximum 32 signers; hash prefix separation between single-sign and multi-sign |
-| **Gaps** | Nested multi-sign (proposed) introduces recursive validation with quorum relaxation when cycles make configured quorum unachievable — the effective quorum is silently lowered without account holder consent |
+| **Gaps** | Nested multi-sign (proposed) introduces recursive validation with quorum relaxation when cycles make configured quorum unachievable; the effective quorum is silently lowered without account holder consent |
 
 ---
 
@@ -500,7 +500,7 @@ The following attack chains combine multiple STRIDE threats into realistic end-t
     Universal account compromise
 ```
 
-**Precedent:** A major XRPL amendment vulnerability reached the validator voting stage — one vote from irreversible mainnet activation.
+**Precedent:** A major XRPL amendment vulnerability reached the validator voting stage, one vote from irreversible mainnet activation.
 
 ### Chain 3: Validator Infrastructure Compromise → Consensus Manipulation
 
@@ -562,8 +562,8 @@ The following attack chains combine multiple STRIDE threats into realistic end-t
 
 ### MITRE Frameworks
 - [MITRE ATT&CK Enterprise](https://attack.mitre.org/)
-- [MITRE AADAPT — Digital Asset Threat Framework](https://aadapt.mitre.org/)
-- [MITRE ATLAS — AI/ML Threat Framework](https://atlas.mitre.org/)
+- [MITRE AADAPT: Digital Asset Threat Framework](https://aadapt.mitre.org/)
+- [MITRE ATLAS: AI/ML Threat Framework](https://atlas.mitre.org/)
 
 ### XRPL Protocol Documentation
 - [XRPL Consensus Protocol](https://xrpl.org/docs/concepts/consensus-protocol)
@@ -577,16 +577,16 @@ The following attack chains combine multiple STRIDE threats into realistic end-t
 
 ### Incident Data
 - [xrpl.js Supply Chain Attack Disclosure (April 2025)](https://xrpl.org/blog/2025/vulnerabilitydisclosurereport-bug-apr2025)
-- [Aikido Security — XRP Supply Chain Attack Analysis](https://www.aikido.dev/blog/xrp-supplychain-attack-official-npm-package-infected-with-crypto-stealing-backdoor)
+- [Aikido Security: XRP Supply Chain Attack Analysis](https://www.aikido.dev/blog/xrp-supplychain-attack-official-npm-package-infected-with-crypto-stealing-backdoor)
 - [XRPL PaymentChannelClaim Crash Disclosure (Nov 2024)](https://xrpl.org/blog/2025/vulnerabilitydisclosurereport-bug-nov2024)
 - [XRPL Network Halt (Feb 2025)](https://www.theblock.co/post/338980/xrp-ledger-halt)
-- [Bybit Hack Technical Analysis — NCC Group](https://www.nccgroup.com/research-blog/in-depth-technical-analysis-of-the-bybit-hack/)
+- [Bybit Hack Technical Analysis, NCC Group](https://www.nccgroup.com/research-blog/in-depth-technical-analysis-of-the-bybit-hack/)
 - [Ronin Bridge Hack (2022)](https://limechain.tech/blog/biggest-blockchain-bridge-hacks-2022)
-- [Lazarus Group Analysis — Hacken](https://hacken.io/discover/lazarus-group/)
+- [Lazarus Group Analysis, Hacken](https://hacken.io/discover/lazarus-group/)
 - [North Korea $2.02B Crypto Theft 2025](https://thehackernews.com/2025/12/north-korea-linked-hackers-steal-202.html)
-- [BGP Hijacking for Cryptocurrency — Secureworks](https://www.secureworks.com/research/bgp-hijacking-for-cryptocurrency-profit)
+- [BGP Hijacking for Cryptocurrency, Secureworks](https://www.secureworks.com/research/bgp-hijacking-for-cryptocurrency-profit)
 - [Eclipse Attacks on Ethereum P2P (2026)](https://arxiv.org/html/2601.16560v1)
-- [Chris Larsen $150M Loss — LastPass Link](https://thehackernews.com/2025/04/ripples-xrpljs-npm-package-backdoored.html)
+- [Chris Larsen $150M Loss (LastPass Link)](https://thehackernews.com/2025/04/ripples-xrpljs-npm-package-backdoored.html)
 - [Deepfake Statistics 2025](https://deepstrike.io/blog/deepfake-statistics-2025)
 - [MITRE ATLAS Deepfake KYC Case Study (Nov 2025)](https://atlas.mitre.org/)
 
@@ -594,5 +594,5 @@ The following attack chains combine multiple STRIDE threats into realistic end-t
 - [Visa FY2025 Earnings](https://s1.q4cdn.com/050606653/files/doc_financials/2025/q4/Q4-2025-Earnings-Release_vF.pdf)
 - [SWIFT Customer Security Programme](https://www.swift.com/myswift/customer-security-programme-csp/security-controls)
 - [DTCC Operational Resilience](https://www.dtcc.com/operational-resilience)
-- [SEC — Regulation SCI](https://www.sec.gov/rules-regulations/2015/12/regulation-systems-compliance-integrity)
-- [SEC — ICE $10M Penalty](https://www.sec.gov/newsroom/press-releases/2024-63)
+- [SEC: Regulation SCI](https://www.sec.gov/rules-regulations/2015/12/regulation-systems-compliance-integrity)
+- [SEC: ICE $10M Penalty](https://www.sec.gov/newsroom/press-releases/2024-63)
