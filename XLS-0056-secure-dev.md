@@ -50,6 +50,7 @@ Four modes with defined failure behaviour represent significant combinatorial co
 | Trust boundary analysis | None | The outer/inner transaction boundary is a classic trust boundary; who authenticates what, when, and what happens when validation short-circuits is never formally modelled |
 | Security-focused SAST / DAST | Absent — see [Static Analysis Tooling](#static-analysis-tooling) below | The CI pipeline runs **clang-tidy** (a general C++ linter) on PRs and daily, but no security-focused SAST (Semgrep, CodeQL, Coverity) is configured. No fuzz testing or dynamic scanning is visible. clang-tidy's bugprone checks do not cover authentication-logic flaws like CWE-305. |
 | Formal security review or audit | None before voting began | The bug was found by an external researcher during the voting window, not during development or a pre-release review gate |
+| Testnet/devnet security validation | Absent — see [Test Network Deployment and Validation](#test-network-deployment-and-validation) below | The Batch amendment was force-enabled on devnet for months and the vulnerability was exploitable there throughout. All testing on devnet (Anodos Labs, performance testing) was functional or performance-focused — zero adversarial testing. No bug bounty targeted devnet. XRPL Testnet mirrors mainnet by policy and played no role. |
 | Security-focused test cases | Not visible | The spec defines happy-path failure conditions but no adversarial test matrix; no test for "what if the signer account doesn't exist on-ledger?" |
 | Combinatorial edge-case analysis | Insufficient | 4 batch modes x multi-account signing x non-existent accounts x key-matching conditions produces a large state space with no visible systematic coverage |
 | Independent security review gate | None | The feature reached the validator voting stage without evidence of a dedicated security review before entering the activation pipeline |
@@ -222,6 +223,95 @@ Two days before the vulnerability was disclosed, the specification was still bei
 
 The pattern of post-merge fix PRs (#6069, #6176, #6207) before the vulnerability was even discovered suggests the original implementation was not stable at merge time.
 
+## Test Network Deployment and Validation
+
+The XLS-0056 secure development analysis above covers the PR trail, code review, and static analysis. This section examines the role — or absence — of test network validation in the Batch amendment's release lifecycle.
+
+### XRPL network topology
+
+XRPL operates three public networks relevant to amendment testing:
+
+| Network | Purpose | Amendment policy |
+|---|---|---|
+| **Mainnet** | Production financial network | Amendments activate via 80% validator consensus over two weeks. Irreversible. |
+| **Testnet** | Mirrors mainnet amendment status | Per XRPL policy (established after the [2020 testnet amendments incident](https://xrpl.org/blog/2020/testnet-amendments-rippled-1.5.0)), new amendments should be **vetoed on Testnet until they gain majority on Mainnet**. Testnet is not a pre-production validation environment — it follows mainnet, not the other way around. |
+| **Devnet** | Experimental feature preview | Amendments that are finished but awaiting release or voting are force-enabled. Based on the `develop` branch. Periodically reset. |
+
+In addition, @dangell7 (the Batch feature author) operated an ad-hoc **"BatchNet"** on personal infrastructure (`nerdnest.xyz`) from approximately August 2024, providing early access to the Batch transaction type before it entered the official release pipeline.
+
+### What testing occurred on each network
+
+#### BatchNet (August 2024 onwards)
+
+- **Operated by:** @dangell7 — the same developer who authored the vulnerable `checkBatchSign` code in PR #5060
+- **Infrastructure:** Community/personal servers at `batch.rpc.nerdnest.xyz` and `batch.nerdnest.xyz`
+- **Purpose:** Developer preview for Batch transaction integration
+- **Security testing:** None visible. BatchNet was a feature development environment, not a security validation platform.
+- **Independence:** Zero. The network was operated by the feature author, using his fork's code. No independent parties are known to have conducted adversarial testing against it.
+
+#### Devnet (Batch force-enabled from approximately mid-2025)
+
+Devnet had the Batch amendment force-enabled. This is confirmed by the [devnet reset scheduled for March 3, 2026](https://u.today/xrp-ledger-devnet-reboot-scheduled-for-march-3-as-devs-prepare-for-update), which was required specifically because Batch was set to "unsupported" in rippled 3.1.1 and validators running the new version on devnet would become amendment-blocked.
+
+**The vulnerability was exploitable on devnet for months.** From the time the Batch amendment was force-enabled through February 19, 2026, anyone submitting a Batch transaction with a non-existent signer account followed by victim account signers would have triggered the `checkBatchSign` early-return bug. No one did — because no adversarial testing was conducted.
+
+Two testing efforts occurred on devnet:
+
+1. **Anodos Labs functional testing (October 2025)** — [Published report](https://dev.to/anodos/xrpl-batch-transactions-testing-report-3p1n) validated functional behaviour: bundling Payment and TrustSet operations, ALLORNOTHING mode, fee abstraction, and sequence numbering. **No signature validation testing. No authentication bypass testing. No adversarial inputs.** The report concluded the amendment was *"technically sound, functions as designed, and is ready for mainnet activation."* This conclusion was based entirely on happy-path functional testing. Anodos Labs is an XRPL UNL validator — their endorsement carried weight with other validators considering their votes.
+
+2. **Performance testing (August 2025)** — [Published report](https://dev.to/ripplexdev/batch-transaction-performance-testing-report-13j8) by Qi Zhao and Luc des Trois Maisons measured throughput and latency on a private 9-node simulation (5 validators, 4 P2P gateways on AWS). **Performance-only scope. No security testing of any kind.** The report confirmed Batch transactions did not impair ledger throughput but did not examine whether inner transaction signers were correctly validated.
+
+#### Testnet
+
+Per XRPL's own policy, testnet mirrors mainnet amendment status. The Batch amendment was not activated on mainnet, so it would not have been active on testnet. **Testnet played no role in Batch validation.**
+
+### What was missing
+
+| Test Network Activity | Status | Observation |
+|---|---|---|
+| Adversarial transaction testing on devnet | **Absent** | No test submitted Batch transactions with non-existent signer accounts, mismatched signatures, or signer-ordering attacks. The bug was one adversarial transaction away from discovery. |
+| Independent security testing on any network | **Absent** | All testing was conducted by the feature team or aligned community members. No external security researchers tested Batch on devnet or BatchNet. |
+| Bug bounty against devnet-enabled amendment | **Absent** | No amendment-scoped bug bounty was established for Batch on any test network. The bug bounty that ultimately caught the vulnerability (Cantina/Immunefi) ran against code already in the mainnet voting window. |
+| Structured testnet validation phase | **Absent** | No defined period between "amendment available on devnet" and "amendment enters mainnet voting" was reserved for independent security testing. |
+| Soak period with monitoring | **Absent** | No evidence of systematic monitoring of devnet consensus metrics, error rates, or anomalous transaction patterns during the months Batch was force-enabled. |
+
+### The structural problem
+
+The XRPL test network architecture has a design-level gap for pre-activation security validation:
+
+1. **Testnet cannot serve as a pre-production gate.** XRPL policy explicitly states testnet should mirror mainnet — amendments are vetoed on testnet until they gain majority on mainnet. This means testnet follows mainnet activation, not the other way around. There is no equivalent of Ethereum's Sepolia/Holesky deployment phase where amendments run on a live test network for weeks to months before mainnet activation, with expanded bug bounties targeting the new features.
+
+2. **Devnet is a development environment, not a security validation environment.** Devnet has amendments force-enabled and is periodically reset. It is not structured for sustained adversarial testing, independent security engagement, or soak-period monitoring. No bug bounty programme targets devnet-specific amendment testing.
+
+3. **BatchNet was author-operated.** Having the feature author operate the only dedicated test network creates the same closed-loop problem seen in the code review: the person who wrote the code is also controlling the environment where it is tested. Independent testers need infrastructure they don't control and didn't build.
+
+4. **No transition gate exists between devnet availability and mainnet voting.** The Batch amendment went from devnet (force-enabled, functional testing only) directly to mainnet voting (validator signalling, one vote from irreversible activation) with no structured security validation phase in between.
+
+### The missed opportunity
+
+The vulnerability was exploitable on devnet for approximately 4–8 months before it was discovered on February 19, 2026. During this window:
+
+- Anodos Labs tested on devnet and declared it ready for mainnet — without testing authentication paths
+- Performance testing ran on a private simulation — without testing security
+- The amendment entered mainnet voting — without any adversarial testing on any network
+- Validators began signalling support — based on functional endorsements, not security evidence
+
+A single adversarial Batch transaction — constructed using the procedure described in the [Impact Analysis](#why-this-matters--impact-analysis) — submitted to devnet at any point during this window would have exposed the `checkBatchSign` bypass. The test networks existed. The amendment was running. No one tested what an attacker would do.
+
+### Comparison with peer protocols
+
+| Protocol | Pre-activation testing practice |
+|---|---|
+| **Ethereum** | Amendments deployed to Sepolia and Holesky testnets weeks to months before mainnet hard forks. Continuous bug bounties with scope expansions targeting upcoming upgrades. |
+| **Polkadot** | Kusama canary network — production-grade testnet with real economic value — validates runtime upgrades before Polkadot mainnet. |
+| **Cosmos** | Incentivised testnets with real rewards for finding issues in major upgrades. |
+| **Solana** | Feature gates activated on testnet and devnet before mainnet, with extended observation periods for consensus changes. |
+| **XRPL** | Devnet force-enables amendments. Testnet mirrors mainnet (follows, does not lead). No structured security testing phase. No amendment-scoped bounties on test networks. Bug bounty ran against code in the mainnet voting window. |
+
+XRPL's test network infrastructure exists but is not positioned as a security validation gate. The gap is process discipline, not technical capability.
+
+---
+
 ## The vulnerability — two PRs, one bug
 
 The vulnerability is the product of two PRs interacting:
@@ -244,6 +334,8 @@ Neither PR introduced the vulnerability alone. The root cause is `return tesSUCC
 
 5. **Independent security review.** A reviewer outside the feature team, looking at the code with an adversarial mindset, would ask why an authentication loop returns success mid-iteration rather than continuing. This is Security Code Review 101.
 
+6. **Adversarial testnet validation.** The vulnerability was exploitable on devnet for months. A single adversarial Batch transaction — with a non-existent signer account placed first in the `BatchSigners` array, followed by a victim account signer — would have triggered the bypass. An amendment-scoped bug bounty on devnet, or structured adversarial testing by independent parties, would have found this before the amendment entered mainnet voting. Peer protocols (Ethereum, Polkadot, Cosmos, Solana) all deploy to test networks with security-focused testing phases before production activation.
+
 ## Assessment
 
 The Batch feature demonstrates **functional design rigour**: detailed failure conditions, defined execution semantics, and defensive checks at the spec level. However, there is **near-zero evidence of security design validation** in the SDLC.
@@ -257,6 +349,7 @@ Key process failures:
 - **Dismissed reviewer concern** — @dangell7's "This doesn't seem right" comment on PR #6069 was not escalated or investigated
 - **No adversarial test cases** — high code coverage but zero authentication bypass scenarios
 - **Static analysis is quality-focused, not security-focused** — clang-tidy runs in CI but does not detect authentication-logic flaws; no security SAST (Semgrep, CodeQL, Coverity) is configured despite the repository handling cryptographic authentication for a financial protocol
+- **No test network security validation** — the vulnerability was exploitable on devnet for months while all testing (Anodos Labs functional, Ripple performance) examined only happy-path behaviour. No adversarial transactions were submitted to any test network. No bug bounty targeted the devnet-enabled amendment. XRPL Testnet mirrors mainnet by policy and was structurally unable to serve as a pre-activation validation gate.
 - **Spec still being written during voting** — integration considerations added 2 days before the vulnerability disclosure
 - **No security gate before the amendment entered validator voting** — the last chance to catch issues before an irreversible mainnet activation
 
@@ -398,6 +491,12 @@ The amendment was one validator vote from mainnet activation when Pranamya Keshk
 - [PR #5903 — Sanitize GitHub Actions inputs (sole Semgrep reference)](https://github.com/XRPLF/rippled/pull/5903)
 - [XRPL Vulnerability Disclosure Report (Feb 2026)](https://xrpl.org/blog/2026/vulnerabilitydisclosurereport-bug-feb2026)
 - [XRPL batch amendment security patch blocks mainnet risk](https://en.cryptonomist.ch/2026/02/27/xrpl-batch-amendment-security/)
+- [Batch (XLS-56) is Now Available for Testing and Development — @dangell7 (Aug 2024)](https://dev.to/dangell7/batch-xls-56-is-now-available-for-testing-and-development-18bk)
+- [XRPL Batch Transactions Testing Report — Anodos Labs (Oct 2025)](https://dev.to/anodos/xrpl-batch-transactions-testing-report-3p1n)
+- [Batch Transaction Performance Testing Report — Qi Zhao, Luc des Trois Maisons (Aug 2025)](https://dev.to/ripplexdev/batch-transaction-performance-testing-report-13j8)
+- [XRP Ledger Devnet Reboot Scheduled for March 3 — U.Today](https://u.today/xrp-ledger-devnet-reboot-scheduled-for-march-3-as-devs-prepare-for-update)
+- [Postmortem: Testnet Amendments from rippled 1.5.0 (2020)](https://xrpl.org/blog/2020/testnet-amendments-rippled-1.5.0)
+- [XRPL Amendments — Network and Server Concepts](https://xrpl.org/docs/concepts/networks-and-servers/amendments)
 
 ### Verification note (2026-03-04)
 
