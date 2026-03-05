@@ -20,7 +20,9 @@ Three principles underpin this framework and apply to every gate, role, and proc
 
 ### Open Participation
 
-Anyone can contribute to any stage of the XRPL development lifecycle — specification, threat modelling, code, review, testing, and security analysis. Contributions are governed by structure and quality gates, not by access restrictions. A security researcher challenging a spec design is as valuable as the developer who wrote it. Gatekeeping is applied to the **quality of evidence**, never to **who may provide it**.
+Anyone can contribute to any stage of the XRPL development lifecycle — specification, threat modelling, code, review, testing, and security analysis. Contributions are governed by structure and quality gates, not by access restrictions. A security researcher challenging a spec design is as valuable as the developer who wrote it.
+
+> **Gatekeeping is applied to the quality of evidence, never to who may provide it.**
 
 ### Transparency
 
