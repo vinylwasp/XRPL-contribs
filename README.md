@@ -6,12 +6,24 @@ I've held XRP since 2017 and have been a quiet member of the community ever sinc
 
 I'm not a dev, I'm a security infrastructure guy who played around with pen testing tools and built a lot of active security defenses so I normally stay out of the XRPL amendment process and leave it to the pros in this community, but when the XLS-0056 Batch vulnerability dropped in February 2026 — an authentication bypass one validator vote from going live on mainnet — I read the PRs, recognised the patterns, and thought: *"I know exactly how this happens, and I know what stops it."* Self-merges on security-critical code, closed review loops, no threat model, no adversarial test cases — these are solved problems in every regulated exchange I've worked at. The XRPL just hasn't adopted them yet.
 
-So after years of quietly watching from the sidelines, I decided it was time to contribute something useful rather than just shouting into the void on X. These two documents are that contribution:
+So after years of quietly watching from the sidelines, I decided it was time to contribute something useful rather than just shouting into the void on X. These documents are that contribution:
 
-- **[XLS-0056 Batch Amendment — Security SDLC Analysis](https://github.com/vinylwasp/XRPL-contribs/blob/main/XLS-0056-secure-dev.md)** — A detailed walkthrough of what went wrong in the Batch amendment development process, citing specific PRs and review behaviours, and explaining why standard security practices would have caught the bug before it shipped.
+### Case Study
 
-- **[XRPL Release Governance Framework](https://github.com/vinylwasp/XRPL-contribs/blob/main/XRPL-Release-Governance.md)** — A gate-based governance model designed for XRPL's unique architecture (maintainer-built code, validator-governed activation), with a gap analysis, phased adoption roadmap, and cross-references to NIST, OWASP, SLSA, and PCI DSS standards. Open, transparent, and tool-agnostic — because if anyone can write an amendment, the security process shouldn't be locked behind a paywall.
+- **[XLS-0056 Batch Amendment — Security SDLC Analysis](XLS-0056-secure-dev.md)** — A detailed walkthrough of what went wrong in the Batch amendment development process, citing specific PRs and review behaviours, and explaining why standard security practices would have caught the bug before it shipped.
 
-Both are proposals, not mandates. The XRPL is open-source and decentralised — these documents are offered in that spirit. Fork them, challenge them, improve them. If even one self-merge gets blocked or one threat model gets written because of this, it was worth the effort.
+### Security Posture and Threat Analysis
+
+- **[How Secure Should the XRPL Be?](XRPL-How-secure-should-it-be.md)** — A narrative executive summary comparing the XRPL's security posture to TradFi infrastructure (Visa, SWIFT, DTCC, NYSE), examining the assets, businesses, and ambitions the protocol protects and the governance gap between where it stands and where it needs to be.
+
+- **[XRPL STRIDE Threat Model](XRPL-STRIDE-Threat-Model.md)** — A structured STRIDE analysis of the XRPL protocol and `rippled` implementation, with threat actor profiles, 22 threats mapped to MITRE ATT&CK, AADAPT, and ATLAS frameworks, critical attack chains, and a prioritised recommendations summary.
+
+### Governance
+
+- **[XRPL Release Governance Framework](XRPL-Release-Governance.md)** — A gate-based governance model designed for XRPL's unique architecture (maintainer-built code, validator-governed activation), with a gap analysis, phased adoption roadmap, and cross-references to NIST, OWASP, SLSA, and PCI DSS standards.
+
+- **[XRPL vs TradFi Governance Comparison](XRPL-vs-TradFi-Governance-Comparison.md)** — A structured comparison of XRPL amendment governance against release and change management practices at Visa, SWIFT, the DTCC, and NYSE/ICE.
+
+All are proposals, not mandates. The XRPL is open-source and decentralised — these documents are offered in that spirit. Open, transparent, and tool-agnostic — because if anyone can write an amendment, the security process shouldn't be locked behind a paywall. Fork them, challenge them, improve them. If even one self-merge gets blocked or one threat model gets written because of this, it was worth the effort.
 
 *— Vinylwasp, March 2026*
