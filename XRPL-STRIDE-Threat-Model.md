@@ -6,7 +6,7 @@
 **Methodology:** STRIDE (Microsoft), mapped to MITRE ATT&CK, MITRE AADAPT, and MITRE ATLAS
 **Audience:** XRPL validators, XRP community, ecosystem builders
 **Status:** Discussion
-**Companion:** [How Secure Should the XRPL Be?](How-Secure-Should-the-XRPL-be.md)
+**Companion:** [How Secure Should the XRPL Be?](XRPL-How-secure-should-it-be.md)
 
 ---
 
