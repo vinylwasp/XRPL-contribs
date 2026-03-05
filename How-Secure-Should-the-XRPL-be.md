@@ -167,7 +167,7 @@ A companion document — [XRPL STRIDE Threat Model](XRPL-STRIDE-Threat-Model.md)
 
 ## The Gap
 
-**The gap is not between the XRPL and perfection. The gap is between the XRPL and the minimum standard expected of infrastructure protecting this much value.**
+> **The gap is not between the XRPL and perfection. The gap is between the XRPL and the minimum standard expected of infrastructure protecting this much value.**
 
 | Dimension | TradFi Standard | XRPL Current State |
 |---|---|---|
