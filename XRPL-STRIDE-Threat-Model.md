@@ -71,7 +71,7 @@ Threats to the XRPL come from adversaries with varying levels of sophistication,
 **Resources:** Individual or small group; public tools and exploits.
 **Motivation:** Financial gain, notoriety.
 **Blockchain examples:** Nomad Bridge mass exploitation (August 2022) — once the initial exploit was public, hundreds of opportunistic actors copied the transaction pattern.
-**Relevant techniques:** T1190 (public-facing app exploits), T1078 (credential stuffing), T1059 (scripting), T1566 (mass phishing).
+**Relevant techniques:** [T1190](https://attack.mitre.org/techniques/T1190/) (public-facing app exploits), [T1078](https://attack.mitre.org/techniques/T1078/) (credential stuffing), [T1059](https://attack.mitre.org/techniques/T1059/) (scripting), [T1566](https://attack.mitre.org/techniques/T1566/) (mass phishing).
 **XRPL threat level:** Low for consensus; moderate for individual account compromise and ecosystem tooling.
 
 ### Tier 2 — Targeted Criminal
@@ -80,7 +80,7 @@ Threats to the XRPL come from adversaries with varying levels of sophistication,
 **Resources:** Funded teams; custom tooling; targeted reconnaissance.
 **Motivation:** Financial gain at scale.
 **Blockchain examples:** FIN-series groups, ransomware operators pivoting to crypto.
-**Relevant techniques:** T1566.002 (spear-phishing), T1078.004 (cloud account compromise), T1195 (supply chain), T1021 (remote services).
+**Relevant techniques:** [T1566.002](https://attack.mitre.org/techniques/T1566/002/) (spear-phishing), [T1078.004](https://attack.mitre.org/techniques/T1078/004/) (cloud account compromise), [T1195](https://attack.mitre.org/techniques/T1195/) (supply chain), [T1021](https://attack.mitre.org/techniques/T1021/) (remote services).
 **XRPL threat level:** Moderate. Targeted attacks on validator operators, ecosystem developers, or high-value accounts.
 
 ### Tier 3 — Organised / State-Proxy
@@ -89,7 +89,7 @@ Threats to the XRPL come from adversaries with varying levels of sophistication,
 **Resources:** Custom malware, counter-forensics, long-term campaigns.
 **Motivation:** Large-scale financial theft, strategic disruption.
 **Blockchain examples:** Lazarus Group / TraderTraitor (DPRK) — $6.75B cumulative theft; responsible for Ronin ($625M), Bybit ($1.5B), and numerous supply chain attacks.
-**Relevant techniques:** T1195.001/.002 (supply chain), T1556 (modify auth), T1027 (obfuscation), T1562 (impair defenses), T1557 (adversary-in-the-middle).
+**Relevant techniques:** [T1195.001](https://attack.mitre.org/techniques/T1195/001/)/[.002](https://attack.mitre.org/techniques/T1195/002/) (supply chain), [T1556](https://attack.mitre.org/techniques/T1556/) (modify auth), [T1027](https://attack.mitre.org/techniques/T1027/) (obfuscation), [T1562](https://attack.mitre.org/techniques/T1562/) (impair defenses), [T1557](https://attack.mitre.org/techniques/T1557/) (adversary-in-the-middle).
 **XRPL threat level:** High. The XRPL's $90B+ asset base makes it a prime target. The xrpl.js supply chain attack (April 2025) demonstrated this threat actor tier's interest in the XRPL ecosystem.
 
 ### Tier 4 — State-Directed
@@ -98,16 +98,16 @@ Threats to the XRPL come from adversaries with varying levels of sophistication,
 **Resources:** Zero-day capabilities, firmware/hardware implants, BGP-level network control, long-term persistent access.
 **Motivation:** Strategic intelligence, economic disruption, sanctions evasion.
 **Blockchain examples:** Equation Group (NSA/TAO) capabilities; theoretical application to blockchain infrastructure.
-**Relevant techniques:** T1557 (BGP hijacking), T1195.002 (supply chain at build level), T1542 (firmware persistence), T1556 (modify authentication).
+**Relevant techniques:** [T1557](https://attack.mitre.org/techniques/T1557/) (BGP hijacking), [T1195.002](https://attack.mitre.org/techniques/T1195/002/) (supply chain at build level), [T1542](https://attack.mitre.org/techniques/T1542/) (firmware persistence), [T1556](https://attack.mitre.org/techniques/T1556/) (modify authentication).
 **XRPL threat level:** Moderate-High. Direct consensus attacks are costly, but infrastructure-level attacks (BGP, supply chain, validator host compromise) are within capability.
 
 ### AI-Augmented Threats
 
 MITRE ATLAS documents the growing intersection of AI/ML capabilities with cyber operations:
 
-- **AML.T0040 (ML Model Inference API Access):** AI-powered vulnerability discovery in consensus code. The tool that found one major XRPL vulnerability (Cantina AI Apex) demonstrates the same capability available to adversaries.
-- **AML.T0048 (Social Engineering):** Deepfake-enhanced social engineering targeting validator operators and key holders. Deepfake incidents surged 179 in Q1 2025 alone, with creation costs averaging $1.33 versus average business losses of $450K-$600K per incident.
-- **AML.T0047 (ML-Assisted Cyber Intrusion):** AI-accelerated exploitation of node software vulnerabilities, including automated fuzzing and exploit generation.
+- **[AML.T0040](https://atlas.mitre.org/techniques/AML.T0040) (ML Model Inference API Access):** AI-powered vulnerability discovery in consensus code. The tool that found one major XRPL vulnerability (Cantina AI Apex) demonstrates the same capability available to adversaries.
+- **[AML.T0048](https://atlas.mitre.org/techniques/AML.T0048) (Social Engineering):** Deepfake-enhanced social engineering targeting validator operators and key holders. Deepfake incidents surged 179 in Q1 2025 alone, with creation costs averaging $1.33 versus average business losses of $450K-$600K per incident.
+- **[AML.T0047](https://atlas.mitre.org/techniques/AML.T0047) (ML-Assisted Cyber Intrusion):** AI-accelerated exploitation of node software vulnerabilities, including automated fuzzing and exploit generation.
 
 ---
 
@@ -123,8 +123,8 @@ Spoofing threats involve an attacker impersonating a legitimate entity to gain u
 |---|---|
 | **Target** | C1 (Consensus Engine), TB3 (Validator ↔ Validator) |
 | **Description** | An attacker compromises a trusted validator's private key and publishes proposals or validations as that validator, influencing consensus outcomes. |
-| **ATT&CK** | T1078 (Valid Accounts), T1552 (Unsecured Credentials) |
-| **AADAPT** | ADT3013 (Exploit Blockchain Technology Specific Vulnerabilities) |
+| **ATT&CK** | [T1078](https://attack.mitre.org/techniques/T1078/) (Valid Accounts), [T1552](https://attack.mitre.org/techniques/T1552/) (Unsecured Credentials) |
+| **AADAPT** | [ADT3013](https://aadapt.mitre.org/techniques/ADT3013/) (Exploit Blockchain Technology Specific Vulnerabilities) |
 | **Preconditions** | Validator key stored insecurely; validator host compromised |
 | **Impact** | Consensus influence proportional to the compromised validator's weight in UNLs; potential to block or approve transactions |
 | **Existing mitigations** | UNL trust model limits influence to trusted validators; validator keys can be rotated; ephemeral keys separate node identity from validation |
@@ -136,8 +136,8 @@ Spoofing threats involve an attacker impersonating a legitimate entity to gain u
 |---|---|
 | **Target** | C3 (Cryptographic Subsystem), C8 (Issued Token Layer) |
 | **Description** | Attacker steals a private key or seed phrase through phishing, malware, password manager compromise, or supply chain attack, and signs transactions as the victim. |
-| **ATT&CK** | T1566 (Phishing), T1552 (Unsecured Credentials), T1195.001 (Supply Chain: Software Dependencies) |
-| **ATLAS** | AML.T0048 (AI-enhanced Social Engineering) |
+| **ATT&CK** | [T1566](https://attack.mitre.org/techniques/T1566/) (Phishing), [T1552](https://attack.mitre.org/techniques/T1552/) (Unsecured Credentials), [T1195.001](https://attack.mitre.org/techniques/T1195/001/) (Supply Chain: Software Dependencies) |
+| **ATLAS** | [AML.T0048](https://atlas.mitre.org/techniques/AML.T0048) (AI-enhanced Social Engineering) |
 | **Preconditions** | Victim stores keys insecurely; victim's wallet software or dependencies compromised |
 | **Impact** | Complete account takeover; fund drainage; persistent control via SetRegularKey |
 | **Existing mitigations** | Multi-sign requires multiple keys; regular key rotation possible; DepositAuth limits incoming |
@@ -149,7 +149,7 @@ Spoofing threats involve an attacker impersonating a legitimate entity to gain u
 |---|---|
 | **Target** | C1 (Consensus Engine), C7 (Amendment Governance) |
 | **Description** | Attacker compromises a UNL publisher (Ripple or XRPLF) to inject malicious validators into the recommended UNL. |
-| **ATT&CK** | T1199 (Trusted Relationship), T1078 (Valid Accounts) |
+| **ATT&CK** | [T1199](https://attack.mitre.org/techniques/T1199/) (Trusted Relationship), [T1078](https://attack.mitre.org/techniques/T1078/) (Valid Accounts) |
 | **Preconditions** | Access to UNL publisher's signing infrastructure |
 | **Impact** | Gradual consensus influence; potential to manipulate amendment voting; network fork if UNL overlap degrades below 90% |
 | **Existing mitigations** | UNL lists are signed; operators can choose custom UNLs; multiple UNL publishers exist |
@@ -161,7 +161,7 @@ Spoofing threats involve an attacker impersonating a legitimate entity to gain u
 |---|---|
 | **Target** | C4 (Peer Network), TB2 (Node ↔ Node) |
 | **Description** | Attacker operates nodes that impersonate legitimate peers to intercept or manipulate transaction relay and consensus messages. |
-| **ATT&CK** | T1557 (Adversary-in-the-Middle), T1584 (Compromise Infrastructure) |
+| **ATT&CK** | [T1557](https://attack.mitre.org/techniques/T1557/) (Adversary-in-the-Middle), [T1584](https://attack.mitre.org/techniques/T1584/) (Compromise Infrastructure) |
 | **Preconditions** | Network-level access; ability to reach target nodes |
 | **Impact** | Eclipse attacks isolating nodes; selective transaction censorship; delayed transaction visibility |
 | **Existing mitigations** | TLS on peer connections; node key signing; fixed peer configuration option |
@@ -179,8 +179,8 @@ Tampering threats involve unauthorised modification of data, code, or protocol b
 |---|---|
 | **Target** | C2 (Transaction Engine), C7 (Amendment Governance), TB4 (Amendment → Protocol) |
 | **Description** | A vulnerability in new amendment code alters transaction processing in unintended ways — authentication bypasses, incorrect state transitions, or logic errors. |
-| **ATT&CK** | T1195.002 (Supply Chain: Software Supply Chain), T1556 (Modify Authentication Process) |
-| **AADAPT** | ADT3013 (Exploit Blockchain Technology Specific Vulnerabilities) |
+| **ATT&CK** | [T1195.002](https://attack.mitre.org/techniques/T1195/002/) (Supply Chain: Software Supply Chain), [T1556](https://attack.mitre.org/techniques/T1556/) (Modify Authentication Process) |
+| **AADAPT** | [ADT3013](https://aadapt.mitre.org/techniques/ADT3013/) (Exploit Blockchain Technology Specific Vulnerabilities) |
 | **Preconditions** | Vulnerable code passes review and testing; amendment activates on mainnet |
 | **Impact** | Protocol-wide: every node runs the same code. Impact ranges from individual transaction failures to universal authentication bypass. |
 | **Existing mitigations** | Code review by maintainers; CI test suite; 2-week voting window; invariant checks post-transaction |
@@ -192,7 +192,7 @@ Tampering threats involve unauthorised modification of data, code, or protocol b
 |---|---|
 | **Target** | All components; TB4 (Amendment → Protocol) |
 | **Description** | Attacker compromises the `rippled` build pipeline, dependencies, or release process to inject malicious code into the binary distributed to validators. |
-| **ATT&CK** | T1195.001 (Compromise Software Dependencies), T1195.002 (Compromise Software Supply Chain) |
+| **ATT&CK** | [T1195.001](https://attack.mitre.org/techniques/T1195/001/) (Compromise Software Dependencies), [T1195.002](https://attack.mitre.org/techniques/T1195/002/) (Compromise Software Supply Chain) |
 | **Preconditions** | Access to CI/CD infrastructure, dependency repositories, or maintainer accounts |
 | **Impact** | Every validator running the compromised binary is affected. Could enable consensus manipulation, key exfiltration, or backdoor access. |
 | **Existing mitigations** | Open-source code (auditable); GitHub Actions CI with visible checks |
@@ -204,8 +204,8 @@ Tampering threats involve unauthorised modification of data, code, or protocol b
 |---|---|
 | **Target** | C2 (Transaction Engine), C9 (DEX and AMM) |
 | **Description** | Attacker crafts transactions that exploit parsing, validation, or execution logic to achieve unintended outcomes — partial payment confusion, path manipulation, DEX front-running. |
-| **ATT&CK** | T1190 (Exploit Public-Facing Application), T1565 (Data Manipulation) |
-| **AADAPT** | ADT3021.003 (Market Manipulation: Wash Trading), ADT3013 |
+| **ATT&CK** | [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application), [T1565](https://attack.mitre.org/techniques/T1565/) (Data Manipulation) |
+| **AADAPT** | [ADT3021.003](https://aadapt.mitre.org/techniques/ADT3021/003/) (Market Manipulation: Wash Trading), [ADT3013](https://aadapt.mitre.org/techniques/ADT3013/) |
 | **Preconditions** | Knowledge of protocol internals; ability to submit transactions |
 | **Impact** | Financial loss for individual victims; DEX price manipulation; trust line balance manipulation via rippling |
 | **Existing mitigations** | Preflight validation; invariant checks; partial payment protections (`delivered_amount` field); deterministic transaction ordering within ledger |
@@ -217,7 +217,7 @@ Tampering threats involve unauthorised modification of data, code, or protocol b
 |---|---|
 | **Target** | C10 (Cross-Chain Bridge), TB7 (Witness → Bridge) |
 | **Description** | Attacker compromises sufficient witness servers to forge attestations, enabling unauthorised cross-chain transfers. |
-| **ATT&CK** | T1078 (Valid Accounts), T1098 (Account Manipulation) |
+| **ATT&CK** | [T1078](https://attack.mitre.org/techniques/T1078/) (Valid Accounts), [T1098](https://attack.mitre.org/techniques/T1098/) (Account Manipulation) |
 | **Preconditions** | Compromise of witness quorum threshold |
 | **Impact** | Unauthorised minting or release of bridged assets; bridge draining. Historical precedent: Ronin Bridge ($625M), Wormhole ($326M). |
 | **Existing mitigations** | Quorum requirement for attestations; door account controls |
@@ -229,7 +229,7 @@ Tampering threats involve unauthorised modification of data, code, or protocol b
 |---|---|
 | **Target** | C4 (Peer Network), TB2/TB3 |
 | **Description** | AS-level adversary hijacks BGP routes to intercept, delay, or manipulate validator-to-validator communication. |
-| **ATT&CK** | T1557 (Adversary-in-the-Middle) |
+| **ATT&CK** | [T1557](https://attack.mitre.org/techniques/T1557/) (Adversary-in-the-Middle) |
 | **Preconditions** | BGP-level network access (ISP, IX, or nation-state capability) |
 | **Impact** | Consensus delays; network partitioning; targeted double-spend against isolated nodes. Documented in Bitcoin (2014), MyEtherWallet (2018), Celer Bridge (2022). |
 | **Existing mitigations** | TLS on peer connections; multiple network paths |
@@ -258,7 +258,7 @@ Repudiation threats involve an actor denying responsibility for an action or cla
 |---|---|
 | **Target** | C3 (Cryptographic Subsystem), TB6 (Signer → Account) |
 | **Description** | A multi-sign participant disputes that they authorised a transaction. With shared or poorly managed keys, attribution may be contested. |
-| **ATT&CK** | T1078 (Valid Accounts) |
+| **ATT&CK** | [T1078](https://attack.mitre.org/techniques/T1078/) (Valid Accounts) |
 | **Impact** | Legal and operational disputes over transaction authorisation, particularly for institutional accounts |
 | **Existing mitigations** | Cryptographic signatures are non-repudiable if keys are properly managed; on-chain transaction records are immutable |
 | **Gaps** | No on-chain timestamped attestation of signer intent; no standard for proving key custody at time of signing |
@@ -275,7 +275,7 @@ Information disclosure threats involve exposure of sensitive data to unauthorise
 |---|---|
 | **Target** | C3 (Cryptographic Subsystem) |
 | **Description** | Compromised client libraries, wallet software, or dependencies exfiltrate private keys to attacker-controlled infrastructure. |
-| **ATT&CK** | T1195.001 (Compromise Software Dependencies), T1552 (Unsecured Credentials) |
+| **ATT&CK** | [T1195.001](https://attack.mitre.org/techniques/T1195/001/) (Compromise Software Dependencies), [T1552](https://attack.mitre.org/techniques/T1552/) (Unsecured Credentials) |
 | **Preconditions** | Victim uses compromised library version |
 | **Impact** | Mass key compromise across all users of the affected library. The xrpl.js backdoor (April 2025, CVE-2025-32965, CVSS 9.3) exfiltrated seed phrases via a `checkValidityOfSeed` function. |
 | **Existing mitigations** | Rapid detection and response (xrpl.js was patched same day); npm security advisories |
@@ -287,7 +287,7 @@ Information disclosure threats involve exposure of sensitive data to unauthorise
 |---|---|
 | **Target** | C6 (Ledger State) |
 | **Description** | Blockchain data is public by design. Attackers scrape account balances, signer list configurations, trust line relationships, and transaction patterns to identify high-value targets and security weaknesses. |
-| **AADAPT** | ADT3025 (Scrape Blockchain Data) |
+| **AADAPT** | [ADT3025](https://aadapt.mitre.org/techniques/ADT3025/) (Scrape Blockchain Data) |
 | **Impact** | Targeted attacks on high-value accounts; signer list analysis to identify quorum weaknesses; transaction pattern analysis for social engineering |
 | **Existing mitigations** | Pseudonymity (account addresses are not directly linked to identities) |
 | **Gaps** | Inherent to public ledger design; no privacy features for transaction amounts or participants; pseudonymity is weakened by exchange KYC linkages |
@@ -298,7 +298,7 @@ Information disclosure threats involve exposure of sensitive data to unauthorise
 |---|---|
 | **Target** | C1 (Consensus Engine), C4 (Peer Network) |
 | **Description** | Validators leak infrastructure details (IP addresses, hosting providers, software versions, peer connections) that enable targeted attacks. |
-| **ATT&CK** | T1592 (Gather Victim Host Information), T1590 (Gather Victim Network Information) |
+| **ATT&CK** | [T1592](https://attack.mitre.org/techniques/T1592/) (Gather Victim Host Information), [T1590](https://attack.mitre.org/techniques/T1590/) (Gather Victim Network Information) |
 | **Impact** | Enables targeted DoS, eclipse attacks, or infrastructure compromise |
 | **Existing mitigations** | Validators can use proxy layers; peer connections use TLS |
 | **Gaps** | Validator IP addresses are often discoverable via peer protocol; no standard for validator operational security |
@@ -315,7 +315,7 @@ Denial of service threats aim to disrupt the availability of the XRPL network or
 |---|---|
 | **Target** | C1 (Consensus Engine), TB3 (Validator ↔ Validator) |
 | **Description** | Attacker disrupts consensus by taking >20% of UNL validators offline (liveness attack) or causing validation drift. |
-| **ATT&CK** | T1499 (Endpoint Denial of Service), T1498 (Network Denial of Service) |
+| **ATT&CK** | [T1499](https://attack.mitre.org/techniques/T1499/) (Endpoint Denial of Service), [T1498](https://attack.mitre.org/techniques/T1498/) (Network Denial of Service) |
 | **Preconditions** | Ability to disrupt validator connectivity or crash validator processes |
 | **Impact** | Network halt (fail-safe — no invalid transactions). The XRPL experienced a 64-minute halt in February 2025 due to validation drift. |
 | **Existing mitigations** | Negative UNL mechanism excludes offline validators from quorum; network fails safe (halts rather than processing invalid transactions) |
@@ -327,7 +327,7 @@ Denial of service threats aim to disrupt the availability of the XRPL network or
 |---|---|
 | **Target** | C2 (Transaction Engine), C5 (Client API), TB1 (Client → Node) |
 | **Description** | Attacker floods the network with valid or near-valid transactions to exhaust node resources and delay legitimate transactions. |
-| **ATT&CK** | T1499 (Endpoint DoS) |
+| **ATT&CK** | [T1499](https://attack.mitre.org/techniques/T1499/) (Endpoint DoS) |
 | **Preconditions** | Sufficient XRP to pay transaction fees; multiple accounts |
 | **Impact** | Degraded performance; increased latency; legitimate transaction delays |
 | **Existing mitigations** | Transaction fees (destroyed, not redistributed); reserve requirements; fee escalation under load; per-account sequence numbers prevent replay |
@@ -339,7 +339,7 @@ Denial of service threats aim to disrupt the availability of the XRPL network or
 |---|---|
 | **Target** | C4 (Peer Network), TB2 (Node ↔ Node) |
 | **Description** | Attacker monopolises all peer connections of a target node, controlling its view of the network. |
-| **ATT&CK** | T1557 (Adversary-in-the-Middle), T1584 (Compromise Infrastructure) |
+| **ATT&CK** | [T1557](https://attack.mitre.org/techniques/T1557/) (Adversary-in-the-Middle), [T1584](https://attack.mitre.org/techniques/T1584/) (Compromise Infrastructure) |
 | **Preconditions** | Network proximity; knowledge of target's peer configuration |
 | **Impact** | Targeted node sees attacker's version of the ledger; potential for localised double-spend; delayed transaction visibility for exchanges or payment processors relying on the eclipsed node |
 | **Existing mitigations** | Fixed peer configuration; validator-specific connections; UNL validation provides a cross-check |
@@ -351,8 +351,8 @@ Denial of service threats aim to disrupt the availability of the XRPL network or
 |---|---|
 | **Target** | C2 (Transaction Engine), C5 (Client API) |
 | **Description** | Attacker submits specially crafted transactions or peer messages that trigger crashes in `rippled`. |
-| **ATT&CK** | T1190 (Exploit Public-Facing Application) |
-| **AADAPT** | ADT3013 (Exploit Blockchain Technology Specific Vulnerabilities) |
+| **ATT&CK** | [T1190](https://attack.mitre.org/techniques/T1190/) (Exploit Public-Facing Application) |
+| **AADAPT** | [ADT3013](https://aadapt.mitre.org/techniques/ADT3013/) (Exploit Blockchain Technology Specific Vulnerabilities) |
 | **Preconditions** | Knowledge of parser or validation bugs |
 | **Impact** | Individual node crashes; if widespread, consensus disruption. The November 2024 PaymentChannelClaim crash affected nodes with cached objects for approximately 10 minutes. |
 | **Existing mitigations** | Preflight validation; invariant checks; CI test suite |
@@ -370,8 +370,8 @@ Elevation of privilege threats involve an attacker gaining capabilities beyond w
 |---|---|
 | **Target** | C2 (Transaction Engine), C3 (Cryptographic Subsystem) |
 | **Description** | A flaw in transaction authentication logic allows an attacker to execute transactions on behalf of accounts they do not control. |
-| **ATT&CK** | T1556 (Modify Authentication Process) |
-| **AADAPT** | ADT3013 (Exploit Blockchain Technology Specific Vulnerabilities) |
+| **ATT&CK** | [T1556](https://attack.mitre.org/techniques/T1556/) (Modify Authentication Process) |
+| **AADAPT** | [ADT3013](https://aadapt.mitre.org/techniques/ADT3013/) (Exploit Blockchain Technology Specific Vulnerabilities) |
 | **Preconditions** | Authentication logic bug in consensus-critical code |
 | **Impact** | Universal account takeover; fund drainage; persistent compromise via SetRegularKey. CWE-305 (Authentication Bypass by Primary Weakness). |
 | **Existing mitigations** | Code review; invariant checks (but invariants verify state consistency, not authentication) |
@@ -383,8 +383,8 @@ Elevation of privilege threats involve an attacker gaining capabilities beyond w
 |---|---|
 | **Target** | C7 (Amendment Governance), TB4 (Amendment → Protocol) |
 | **Description** | Attacker influences the amendment process to activate malicious or vulnerable code — through social engineering of validators, compromise of validator keys, or introduction of subtle vulnerabilities in amendment code. |
-| **ATT&CK** | T1199 (Trusted Relationship), T1566 (Phishing) |
-| **ATLAS** | AML.T0048 (AI-enhanced Social Engineering) |
+| **ATT&CK** | [T1199](https://attack.mitre.org/techniques/T1199/) (Trusted Relationship), [T1566](https://attack.mitre.org/techniques/T1566/) (Phishing) |
+| **ATLAS** | [AML.T0048](https://atlas.mitre.org/techniques/AML.T0048) (AI-enhanced Social Engineering) |
 | **Preconditions** | Ability to influence >80% of UNL validators' votes, or ability to introduce vulnerable code that passes review |
 | **Impact** | Irreversible protocol change; cannot be rolled back without a new corrective amendment and another 2-week activation cycle |
 | **Existing mitigations** | 2-week sustained supermajority required; validators can independently evaluate code; open-source codebase |
@@ -396,7 +396,7 @@ Elevation of privilege threats involve an attacker gaining capabilities beyond w
 |---|---|
 | **Target** | C8 (Issued Token Layer), TB5 (Issuer → Holder) |
 | **Description** | A token issuer uses freeze, clawback, or authorisation controls to seize or restrict assets beyond what holders expected. |
-| **ATT&CK** | T1098 (Account Manipulation) |
+| **ATT&CK** | [T1098](https://attack.mitre.org/techniques/T1098/) (Account Manipulation) |
 | **Preconditions** | Issuer account with freeze or clawback enabled |
 | **Impact** | Holder assets frozen or clawed back; trust erosion in XRPL-issued assets |
 | **Existing mitigations** | NoFreeze flag (irreversible); clawback must be enabled before issuance (AllowTrustLineClawback is irreversible); holders can set NoRipple |
@@ -408,7 +408,7 @@ Elevation of privilege threats involve an attacker gaining capabilities beyond w
 |---|---|
 | **Target** | C2 (Transaction Engine), TB9 (Delegate → Delegator) |
 | **Description** | A delegate exploits overly broad permissions or a bug in the delegation system to perform actions beyond their intended scope. |
-| **ATT&CK** | T1098 (Account Manipulation) |
+| **ATT&CK** | [T1098](https://attack.mitre.org/techniques/T1098/) (Account Manipulation) |
 | **Preconditions** | Delegation granted with excessive permissions; or bug in delegation enforcement |
 | **Impact** | Unauthorised transactions from delegator's account |
 | **Existing mitigations** | Granular permission types; sub-permissions limit scope; delegator can revoke |
@@ -420,7 +420,7 @@ Elevation of privilege threats involve an attacker gaining capabilities beyond w
 |---|---|
 | **Target** | C3 (Cryptographic Subsystem), TB6 (Signer → Account) |
 | **Description** | Attacker exploits signer list configuration — misconfigured weights, compromised subset of signers, or (in nested multi-sign) quorum relaxation — to sign transactions with fewer authorisations than the account holder intended. |
-| **ATT&CK** | T1098 (Account Manipulation), T1078 (Valid Accounts) |
+| **ATT&CK** | [T1098](https://attack.mitre.org/techniques/T1098/) (Account Manipulation), [T1078](https://attack.mitre.org/techniques/T1078/) (Valid Accounts) |
 | **Preconditions** | Quorum misconfiguration or compromise of sufficient signer keys |
 | **Impact** | Transactions signed below intended security threshold; account compromise |
 | **Existing mitigations** | Explicit quorum and weight configuration; maximum 32 signers; hash prefix separation between single-sign and multi-sign |
@@ -432,29 +432,29 @@ Elevation of privilege threats involve an attacker gaining capabilities beyond w
 
 | ID | STRIDE | Threat | Actors | Severity | ATT&CK / AADAPT |
 |---|---|---|---|---|---|
-| S1 | Spoofing | Validator key compromise | T3, T4 | Critical | T1078, T1552 |
-| S2 | Spoofing | Account key theft | T1-T4 | High | T1566, T1552, T1195.001 |
-| S3 | Spoofing | UNL publisher compromise | T3, T4 | Critical | T1199, T1078 |
-| S4 | Spoofing | Peer node impersonation | T2-T4 | Moderate | T1557, T1584 |
-| T1 | Tampering | Amendment logic vulnerability | T2-T4 | Critical | T1195.002, T1556, ADT3013 |
-| T2 | Tampering | Supply chain compromise of rippled | T3, T4 | Critical | T1195.001/.002 |
-| T3 | Tampering | Transaction data manipulation | T1-T3 | Moderate-High | T1190, T1565, ADT3021.003 |
-| T4 | Tampering | Bridge attestation forgery | T2-T4 | High | T1078, T1098 |
-| T5 | Tampering | BGP hijacking of validator traffic | T4 | High | T1557 |
+| S1 | Spoofing | Validator key compromise | T3, T4 | Critical | [T1078](https://attack.mitre.org/techniques/T1078/), [T1552](https://attack.mitre.org/techniques/T1552/) |
+| S2 | Spoofing | Account key theft | T1-T4 | High | [T1566](https://attack.mitre.org/techniques/T1566/), [T1552](https://attack.mitre.org/techniques/T1552/), [T1195.001](https://attack.mitre.org/techniques/T1195/001/) |
+| S3 | Spoofing | UNL publisher compromise | T3, T4 | Critical | [T1199](https://attack.mitre.org/techniques/T1199/), [T1078](https://attack.mitre.org/techniques/T1078/) |
+| S4 | Spoofing | Peer node impersonation | T2-T4 | Moderate | [T1557](https://attack.mitre.org/techniques/T1557/), [T1584](https://attack.mitre.org/techniques/T1584/) |
+| T1 | Tampering | Amendment logic vulnerability | T2-T4 | Critical | [T1195.002](https://attack.mitre.org/techniques/T1195/002/), [T1556](https://attack.mitre.org/techniques/T1556/), [ADT3013](https://aadapt.mitre.org/techniques/ADT3013/) |
+| T2 | Tampering | Supply chain compromise of rippled | T3, T4 | Critical | [T1195.001](https://attack.mitre.org/techniques/T1195/001/)/[.002](https://attack.mitre.org/techniques/T1195/002/) |
+| T3 | Tampering | Transaction data manipulation | T1-T3 | Moderate-High | [T1190](https://attack.mitre.org/techniques/T1190/), [T1565](https://attack.mitre.org/techniques/T1565/), [ADT3021.003](https://aadapt.mitre.org/techniques/ADT3021/003/) |
+| T4 | Tampering | Bridge attestation forgery | T2-T4 | High | [T1078](https://attack.mitre.org/techniques/T1078/), [T1098](https://attack.mitre.org/techniques/T1098/) |
+| T5 | Tampering | BGP hijacking of validator traffic | T4 | High | [T1557](https://attack.mitre.org/techniques/T1557/) |
 | R1 | Repudiation | Amendment voting without accountability | N/A | Moderate | N/A |
-| R2 | Repudiation | Transaction signing disputes | N/A | Low-Moderate | T1078 |
-| I1 | Info Disclosure | Key exfiltration via supply chain | T2-T4 | Critical | T1195.001, T1552 |
-| I2 | Info Disclosure | On-chain reconnaissance | T1-T4 | Low | ADT3025 |
-| I3 | Info Disclosure | Validator infrastructure leakage | T2-T4 | Moderate | T1592, T1590 |
-| D1 | DoS | Consensus disruption | T3, T4 | High | T1499 |
-| D2 | DoS | Transaction flooding | T1-T3 | Moderate | T1499 |
-| D3 | DoS | Eclipse attack | T2-T4 | Moderate-High | T1557, T1584 |
-| D4 | DoS | Node crash via malformed input | T1-T3 | Moderate-High | T1190, ADT3013 |
-| E1 | EoP | Authentication bypass | T2-T4 | Critical | T1556, ADT3013 |
-| E2 | EoP | Amendment governance manipulation | T3, T4 | Critical | T1199, T1566, AML.T0048 |
-| E3 | EoP | Issuer privilege abuse | T1-T2 | Moderate | T1098 |
-| E4 | EoP | Delegate permission escalation | T1-T3 | Moderate | T1098 |
-| E5 | EoP | Multi-sign quorum manipulation | T2-T3 | High | T1098, T1078 |
+| R2 | Repudiation | Transaction signing disputes | N/A | Low-Moderate | [T1078](https://attack.mitre.org/techniques/T1078/) |
+| I1 | Info Disclosure | Key exfiltration via supply chain | T2-T4 | Critical | [T1195.001](https://attack.mitre.org/techniques/T1195/001/), [T1552](https://attack.mitre.org/techniques/T1552/) |
+| I2 | Info Disclosure | On-chain reconnaissance | T1-T4 | Low | [ADT3025](https://aadapt.mitre.org/techniques/ADT3025/) |
+| I3 | Info Disclosure | Validator infrastructure leakage | T2-T4 | Moderate | [T1592](https://attack.mitre.org/techniques/T1592/), [T1590](https://attack.mitre.org/techniques/T1590/) |
+| D1 | DoS | Consensus disruption | T3, T4 | High | [T1499](https://attack.mitre.org/techniques/T1499/) |
+| D2 | DoS | Transaction flooding | T1-T3 | Moderate | [T1499](https://attack.mitre.org/techniques/T1499/) |
+| D3 | DoS | Eclipse attack | T2-T4 | Moderate-High | [T1557](https://attack.mitre.org/techniques/T1557/), [T1584](https://attack.mitre.org/techniques/T1584/) |
+| D4 | DoS | Node crash via malformed input | T1-T3 | Moderate-High | [T1190](https://attack.mitre.org/techniques/T1190/), [ADT3013](https://aadapt.mitre.org/techniques/ADT3013/) |
+| E1 | EoP | Authentication bypass | T2-T4 | Critical | [T1556](https://attack.mitre.org/techniques/T1556/), [ADT3013](https://aadapt.mitre.org/techniques/ADT3013/) |
+| E2 | EoP | Amendment governance manipulation | T3, T4 | Critical | [T1199](https://attack.mitre.org/techniques/T1199/), [T1566](https://attack.mitre.org/techniques/T1566/), [AML.T0048](https://atlas.mitre.org/techniques/AML.T0048) |
+| E3 | EoP | Issuer privilege abuse | T1-T2 | Moderate | [T1098](https://attack.mitre.org/techniques/T1098/) |
+| E4 | EoP | Delegate permission escalation | T1-T3 | Moderate | [T1098](https://attack.mitre.org/techniques/T1098/) |
+| E5 | EoP | Multi-sign quorum manipulation | T2-T3 | High | [T1098](https://attack.mitre.org/techniques/T1098/), [T1078](https://attack.mitre.org/techniques/T1078/) |
 
 ---
 
@@ -467,17 +467,17 @@ The following attack chains combine multiple STRIDE threats into realistic end-t
 ```
 [T3 Actor: Lazarus Group]
     |
-    T1566.002 (Spear-phish npm maintainer)
+    T1566.002 (Spear-phish npm maintainer)             ATT&CK: https://attack.mitre.org/techniques/T1566/002/
     |
-    T1195.001 (Compromise xrpl.js dependency)
+    T1195.001 (Compromise xrpl.js dependency)           ATT&CK: https://attack.mitre.org/techniques/T1195/001/
     |
-    T1552 (Exfiltrate private keys via backdoor)    ← I1
+    T1552 (Exfiltrate private keys via backdoor)    ← I1  ATT&CK: https://attack.mitre.org/techniques/T1552/
     |
-    T1078 (Use stolen keys as valid accounts)        ← S2
+    T1078 (Use stolen keys as valid accounts)        ← S2  ATT&CK: https://attack.mitre.org/techniques/T1078/
     |
-    T1565 (Execute unauthorised transactions)        ← E1
+    T1565 (Execute unauthorised transactions)        ← E1  ATT&CK: https://attack.mitre.org/techniques/T1565/
     |
-    ADT3028.005 (Peel chain fund laundering)
+    ADT3028.005 (Peel chain fund laundering)              AADAPT: https://aadapt.mitre.org/techniques/ADT3028/005/
 ```
 
 **Precedent:** xrpl.js CVE-2025-32965 (April 2025). This chain was partially executed in the wild.
@@ -487,15 +487,15 @@ The following attack chains combine multiple STRIDE threats into realistic end-t
 ```
 [T2-T3 Actor]
     |
-    T1195.002 (Introduce vulnerable amendment code)
+    T1195.002 (Introduce vulnerable amendment code)       ATT&CK: https://attack.mitre.org/techniques/T1195/002/
     |
     Social engineering of validators (no evidence pack)  ← E2
     |
     Amendment activates (irreversible)                   ← T1
     |
-    T1556 (Authentication bypass via logic flaw)         ← E1
+    T1556 (Authentication bypass via logic flaw)         ← E1  ATT&CK: https://attack.mitre.org/techniques/T1556/
     |
-    T1190 (Exploit via public transaction API)           ← S2
+    T1190 (Exploit via public transaction API)           ← S2  ATT&CK: https://attack.mitre.org/techniques/T1190/
     |
     Universal account compromise
 ```
@@ -507,13 +507,13 @@ The following attack chains combine multiple STRIDE threats into realistic end-t
 ```
 [T4 Actor: State-directed]
     |
-    T1590/T1592 (Gather validator infrastructure info)   ← I3
+    T1590/T1592 (Gather validator infrastructure info)   ← I3  ATT&CK: https://attack.mitre.org/techniques/T1590/ , https://attack.mitre.org/techniques/T1592/
     |
-    T1557 (BGP hijack validator communications)          ← T5
+    T1557 (BGP hijack validator communications)          ← T5  ATT&CK: https://attack.mitre.org/techniques/T1557/
     |
-    OR T1078.004 (Compromise cloud hosting accounts)
+    OR T1078.004 (Compromise cloud hosting accounts)           ATT&CK: https://attack.mitre.org/techniques/T1078/004/
     |
-    T1098 (Manipulate validator configuration)           ← S1
+    T1098 (Manipulate validator configuration)           ← S1  ATT&CK: https://attack.mitre.org/techniques/T1098/
     |
     Consensus influence / amendment voting manipulation  ← E2
 ```
@@ -525,11 +525,11 @@ The following attack chains combine multiple STRIDE threats into realistic end-t
 ```
 [T2-T3 Actor]
     |
-    AML.T0048 (Deepfake-enhanced social engineering)
+    AML.T0048 (Deepfake-enhanced social engineering)           ATLAS: https://atlas.mitre.org/techniques/AML.T0048
     |
-    T1566 (Spear-phish key holder)                       ← S2
+    T1566 (Spear-phish key holder)                       ← S2  ATT&CK: https://attack.mitre.org/techniques/T1566/
     |
-    T1552 (Obtain private key / seed)
+    T1552 (Obtain private key / seed)                          ATT&CK: https://attack.mitre.org/techniques/T1552/
     |
     SetRegularKey (set attacker's key on victim account) ← E1
     |
