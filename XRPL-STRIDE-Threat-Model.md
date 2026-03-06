@@ -1,7 +1,7 @@
 # XRPL Protocol: STRIDE Threat Model
 
 **Date:** 2026-03-05
-**Author:** Vinylwasp
+**Author:** Legwork by Claude (Anthropic), adult supervision by Chris Lethaby (Vinylwasp)
 **Scope:** XRP Ledger protocol and `rippled` reference implementation
 **Methodology:** STRIDE (Microsoft), mapped to MITRE ATT&CK, MITRE AADAPT, and MITRE ATLAS
 **Audience:** XRPL validators, XRP community, ecosystem builders

@@ -2,7 +2,7 @@
 
 **Version:** 1.1 draft
 **Date:** 2026-03-05
-**Author:** Vinylwasp
+**Author:** Legwork by Claude (Anthropic), adult supervision by Chris Lethaby (Vinylwasp)
 **Status:** Proposal
 **Scope:** rippled (consensus node), XRPL-Standards (specifications), client libraries (xrpl.js, xrpl-py, xrpl4j)
 

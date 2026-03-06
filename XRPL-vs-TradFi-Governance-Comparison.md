@@ -2,7 +2,7 @@
 
 **Version:** 1.0 draft
 **Date:** 2026-03-05
-**Author:** Vinylwasp
+**Author:** Legwork by Claude (Anthropic), adult supervision by Chris Lethaby (Vinylwasp)
 **Status:** Discussion
 **Companion to:** [XRPL Release Governance Framework](XRPL-Release-Governance.md)
 

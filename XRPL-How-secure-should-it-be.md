@@ -1,7 +1,7 @@
 # How Secure Should the XRP Ledger Be?
 
 **Date:** 2026-03-05
-**Author:** Vinylwasp
+**Author:** Legwork by Claude (Anthropic), adult supervision by Chris Lethaby (Vinylwasp)
 **Audience:** XRPL validators, XRP community, ecosystem builders
 **Status:** Discussion
 
