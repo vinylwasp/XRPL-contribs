@@ -28,7 +28,7 @@ So after years of quietly watching from the sidelines, I decided it was time to 
 
 - **[XRPL vs TradFi Governance Comparison](XRPL-vs-TradFi-Governance-Comparison.md):** A structured comparison of XRPL amendment governance against release and change management practices at Visa, SWIFT, the DTCC, and NYSE/ICE.
 
-All are proposals, not mandates. They represent my personal assessment based on publicly available information (PRs, amendment discussions, vulnerability disclosures, and protocol documentation). I am not a `rippled` contributor, I do not have access to internal processes or communications, and there may well be context I am missing that would change parts of this analysis. If something here is wrong, I would genuinely like to know.
+These are a mix of analysis, threat modelling, and one concrete governance proposal. None are mandates. They represent my personal assessment based on publicly available information (PRs, amendment discussions, vulnerability disclosures, and protocol documentation). I am not a `rippled` contributor, I do not have access to internal processes or communications, and there may well be context I am missing that would change parts of this analysis. If something here is wrong, I would genuinely like to know.
 
 These documents are offered in the spirit of the XRPL itself: open, transparent, and tool-agnostic. If anyone can write an amendment, the security process shouldn't be locked behind a paywall. Fork them, challenge them, improve them. If even one self-merge gets blocked or one threat model gets written because of this, it was worth the effort.
 
