@@ -403,7 +403,7 @@ Inner Batch transactions carry **no signatures of their own** by design: `Signin
 
 ### Value at risk
 
-| Metric | Approximate value (February 2026) | Source |
+| Metric | Approximate value (mid-February 2026) | Source |
 |---|---|---|
 | XRP market capitalisation | ~$80–96 billion | CoinMarketCap, multiple media reports |
 | XRPL DeFi TVL | ~$51–55 million | DefiLlama |
@@ -422,7 +422,7 @@ The combined exposure ($80B+ in XRP, $2.3B in tokenised RWAs, $1.56B in RLUSD, a
 
 ### Severity scoring, CWSS v1.0.1
 
-The vulnerability is classified as **[CWE-305: Authentication Bypass by Primary Weakness](https://cwe.mitre.org/data/definitions/305.html)**. The following CWSS (Common Weakness Scoring System) assessment uses MITRE's v1.0.1 methodology, the current version as of March 2026. CWSS has not been updated since September 2014; the version numbers sometimes confused with "CWSS 4" refer to the CWE *list* versioning (currently v4.17–4.19), not the scoring system itself. CWSS v1.0.1 remains the canonical weakness scoring framework published by MITRE ([source](https://cwe.mitre.org/cwss/cwss_v1.0.1.html)).
+The vulnerability is classified as **[CWE-305: Authentication Bypass by Primary Weakness](https://cwe.mitre.org/data/definitions/305.html)**. The following CWSS (Common Weakness Scoring System) assessment uses MITRE's v1.0.1 methodology, the current version as of March 2026. CWSS was chosen over CVSS because this analysis assesses a design-level weakness class (CWE-305) in the development lifecycle, not a specific CVE instance in a deployed system. CWSS scores weaknesses at design time; CVSS scores vulnerabilities at disclosure time. CWSS has not been updated since September 2014; the version numbers sometimes confused with "CWSS 4" refer to the CWE *list* versioning (currently v4.17–4.19), not the scoring system itself. CWSS v1.0.1 remains the canonical weakness scoring framework published by MITRE ([source](https://cwe.mitre.org/cwss/cwss_v1.0.1.html)).
 
 **Vector:**
 
@@ -497,6 +497,12 @@ The amendment was one validator vote from mainnet activation when Pranamya Keshk
 - [XRP Ledger Devnet Reboot Scheduled for March 3, U.Today](https://u.today/xrp-ledger-devnet-reboot-scheduled-for-march-3-as-devs-prepare-for-update)
 - [Postmortem: Testnet Amendments from rippled 1.5.0 (2020)](https://xrpl.org/blog/2020/testnet-amendments-rippled-1.5.0)
 - [XRPL Amendments, Network and Server Concepts](https://xrpl.org/docs/concepts/networks-and-servers/amendments)
+
+### Verification note (2026-03-25, accuracy review)
+
+All factual claims in this report were re-verified against primary sources on 2026-03-25 using the GitHub API (PR metadata, review status, merge history), the official XRPL vulnerability disclosure blog post, and repository content checks. All 15 PR trail claims, all 4 static analysis claims, and all 7 vulnerability disclosure claims were confirmed accurate against their primary sources. Market capitalisation and asset value figures are date-sensitive and cited with appropriate ranges and multiple independent sources.
+
+External sources hosted on dev.to (Anodos Labs testing report, BatchNet announcement, performance testing report) are third-party content that may be modified or removed. The key conclusions from these sources (functional-only testing scope, no adversarial testing, no authentication validation) are quoted in this analysis and would survive source removal.
 
 ### Verification note (2026-03-04)
 
