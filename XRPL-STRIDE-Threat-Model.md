@@ -1,12 +1,14 @@
 # XRPL Protocol: STRIDE Threat Model
 
-**Date:** 2026-03-05
-**Author:** Legwork by Claude (Anthropic), adult supervision by Chris Lethaby (Vinylwasp)
+**Date:** 2026-03-05 (updated 2026-03-25)
+**Author:** Chris Lethaby (Vinylwasp), with Claude Opus
 **Scope:** XRP Ledger protocol and `rippled` reference implementation
 **Methodology:** STRIDE (Microsoft), mapped to MITRE ATT&CK, MITRE AADAPT, and MITRE ATLAS
-**Audience:** XRPL validators, XRP community, ecosystem builders
-**Status:** Discussion
+**Audience:** XRPL validators, XRP community, ecosystem builders, security researchers
+**Status:** Discussion, open for community contribution
 **Companion:** [How Secure Should the XRPL Be?](XRPL-How-secure-should-it-be.md)
+
+**Community note:** This threat model is a starting point, not a finished product. It was produced by one security architect examining publicly available information. The XRPL community includes developers, validators, wallet builders, and researchers who collectively understand the protocol better than any single person. If you see a threat that is missing, overstated, or mitigated by something I have not considered, please open an issue or submit a PR. The rippled repository has a [responsible disclosure process](https://github.com/XRPLF/rippled/blob/develop/SECURITY.md) and [Ripple-sponsored bug bounty](https://github.com/XRPLF/rippled/blob/develop/SECURITY.md#bug-bounty-program) for vulnerabilities. This document is about design-level threats, not specific exploits.
 
 ---
 

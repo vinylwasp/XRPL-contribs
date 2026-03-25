@@ -1,9 +1,11 @@
 # How Secure Should the XRP Ledger Be?
 
-**Date:** 2026-03-05
-**Author:** Legwork by Claude (Anthropic), adult supervision by Chris Lethaby (Vinylwasp)
+**Date:** 2026-03-05 (updated 2026-03-25)
+**Author:** Chris Lethaby (Vinylwasp), with Claude Opus
 **Audience:** XRPL validators, XRP community, ecosystem builders
 **Status:** Discussion
+
+**Update (2026-03-25):** Market figures in this document reflect mid-February 2026 values. All factual claims in the companion [XLS-0056 analysis](XLS-0056-secure-dev.md) have been independently verified against primary sources (GitHub API, official XRPL blog). The [governance proposal](XRPL-Release-Governance.md) has been rewritten as v2.0 to better reflect XRPL's community structure and existing processes.
 
 ---
 

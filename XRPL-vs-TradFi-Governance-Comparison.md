@@ -1,10 +1,11 @@
 # Governance Paradigm Comparison: Traditional Financial Services vs. XRPL
 
-**Version:** 1.0 draft
-**Date:** 2026-03-05
-**Author:** Legwork by Claude (Anthropic), adult supervision by Chris Lethaby (Vinylwasp)
+**Date:** 2026-03-05 (updated 2026-03-25)
+**Author:** Chris Lethaby (Vinylwasp), with Claude Opus
 **Status:** Discussion
-**Companion to:** [XRPL Release Governance Framework](XRPL-Release-Governance.md)
+**Companion to:** [XRPL Amendment Security Governance](XRPL-Release-Governance.md)
+
+**Note (2026-03-25):** The rippled development process was independently analysed against the public repository activity (PRs, labels, milestones, discussions). The observable process is informal Git Flow with quarterly release aspirations (see [Discussion #5379](https://github.com/XRPLF/rippled/discussions/5379)) but no sprint cadence, no security labels, no security reviewer role, and no gate between "code merged to develop" and "amendment enters voting." The existing CONTRIBUTING.md and SECURITY.md provide structure for contributions and vulnerability reporting respectively, but neither addresses amendment security governance. This comparison should be read with that context.
 
 ---
 
@@ -48,6 +49,8 @@ In a well-run financial institution, a software change cannot reach production w
 
 Each of these is a potential **block point**. Any function can halt the release with documented rationale. The developer cannot override the security team. The security team cannot override the change advisory board. The release manager cannot deploy without operations acceptance.
 
+> **From experience:** I've sat in CAB meetings at the London Metal Exchange, a $16 trillion commodities exchange classified as a Systemically Important Financial Institution, where a single unresolved penetration test finding held up a trading platform release for weeks. I've seen the same dynamic at Macquarie Bank and Visa Europe. Nobody enjoyed it. The project sponsors were furious. But nobody questioned whether the process was right, because everyone in the room had seen what happens when you skip it. The process exists because someone, somewhere, at some point, learned the hard way.
+
 #### Second Line: Risk Oversight and Governance
 
 The second line provides oversight, challenge, and governance. These functions do not build or operate systems. They set standards, monitor compliance, and challenge the first line's risk decisions:
@@ -62,6 +65,8 @@ The second line provides oversight, challenge, and governance. These functions d
 | **Business Management** | Own the business outcomes; accountable for risk decisions within their domain | Accept or reject residual risk for their business area |
 
 The second line's defining characteristic is **independence from execution**. The risk management function does not write code, does not deploy systems, and does not operate infrastructure. It assesses whether the first line's risk management is adequate and challenges it when it is not.
+
+> **From experience:** I've worked in organisations where the second line was genuinely independent and organisations where it was a rubber stamp. The difference is night and day. When the risk team reports to the same executive as the delivery team, "challenge" becomes "negotiation" and deadlines always win. When they have a separate reporting line and genuine authority, uncomfortable questions get asked and answered before production, not after an incident. The XRPL has neither version. It has nothing.
 
 In the context of a software release, the second line provides:
 
@@ -138,6 +143,8 @@ Regulatory examination (External - periodic)
 At every stage, an independent function has the authority to challenge, request evidence, or block the change. The developer cannot push to production. The security team can halt the release. The CAB can defer it. Risk management can escalate it. Compliance can block it. Internal audit can retrospectively flag control failures. The regulator can sanction the institution.
 
 **The critical structural property is not that any one control is perfect. It is that multiple independent parties, with different incentives and different perspectives, each have the opportunity to catch what the others missed.**
+
+> **From experience:** I've delivered security infrastructure (EDR, PAM, SIEM) into commodities exchanges and payment networks, and I've been embedded in project teams building eBanking and trading platforms. In every one of those environments, the thing that actually catches bugs is not any single brilliant review. It is the sheer number of independent eyes. The developer misses something, the security reviewer catches it. The security reviewer misses something, the pen tester finds it. The pen tester misses something, the CAB asks an awkward question. Layers are not bureaucracy. They are how you stop the thing that everyone individually missed.
 
 ---
 
@@ -242,6 +249,8 @@ On the XRPL, the validator vote is the **only** control. It is the first, last, 
 - The **auditor**, assessing whether the development process was adequate
 
 No individual or organisation can perform all of these functions competently for every amendment. It is unreasonable to expect a validator operator, who may be running a validator as one responsibility among many, to independently reproduce the work of eight specialised teams.
+
+> **From experience:** I've held GCIA, GCFW, GSNA, CISSP, and SABSA certifications. I've spent 20 years doing this. And I would not trust myself to perform all eight of those functions competently on a single amendment, under time pressure, with no structured evidence to work from. That is not false modesty. It is the reason these functions are separated in every serious financial institution on the planet. The people who designed the three lines of defence model were not being precious. They understood that no one person can hold all the context.
 
 ### 2.5 The Information Asymmetry
 
@@ -440,6 +449,8 @@ On the XRPL:
 
 This accountability vacuum is the structural root cause of the XLS-0056 failure. The vulnerability was not caused by incompetent individuals. It was caused by the absence of governance structures that would have required threat modelling, security review, and adversarial testing. No one was responsible for ensuring these controls existed, so no one ensured they existed. The open-source development model means anyone *can* contribute these controls, but the absence of governance norms means no one *must*.
 
+> **From experience:** I have been the person who got the phone call when something went wrong in production. I have also been the person who blocked a release and got shouted at for it, only to watch a competitor's platform go down the following month because they shipped the same class of bug. Accountability without authority is just blame. Authority without accountability is just power. The XRPL currently has neither, and that is what makes XLS-0056 a systemic issue rather than a one-off mistake.
+
 ---
 
 ## 6. Bridging the Gap: What the XRPL Can Adopt
@@ -532,6 +543,8 @@ This is a simplified proxy for the multi-layered control chain that exists in tr
 In traditional FiServ, the default position is **do not deploy** until all gates are passed. The burden of proof lies with the change proposer.
 
 The same principle should apply to the XRPL: **in the absence of security evidence, validators should abstain or vote against.** The burden of proof lies with the amendment proposer to demonstrate that adequate scrutiny has occurred. This is not obstructionism; it is the standard that every regulated financial institution applies to production deployments.
+
+> **From experience:** Every payments platform I've worked on had a standing rule: if the evidence pack is incomplete, the release does not ship. Full stop. No exceptions, no "we'll fix it in the next release," no "the business needs it by Friday." The rule existed because someone, years earlier, had shipped without evidence and it went badly. The XRPL hasn't had its "badly" moment yet. XLS-0056 came within one validator vote of providing one.
 
 ---
 

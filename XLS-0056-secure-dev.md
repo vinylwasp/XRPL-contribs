@@ -1,7 +1,7 @@
 # XLS-0056 Batch Amendment: Security SDLC Analysis
 
 **Date:** 2026-03-02
-**Author:** Legwork by Claude (Anthropic), adult supervision by Chris Lethaby (Vinylwasp)
+**Author:** Chris Lethaby (Vinylwasp), with Claude Opus
 **Subject:** XRPL Batch Transactions (XLS-0056), assessment of security design validation and testing prior to the February 2026 vulnerability disclosure
 
 ## Background
