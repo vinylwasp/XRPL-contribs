@@ -310,6 +310,7 @@ The two can be adopted independently or together. Phase 1 of this framework (bra
 
 ### XRPL
 - [XLS-0056 Security SDLC Analysis](https://github.com/vinylwasp/XRPL-contribs/blob/main/XLS-0056-secure-dev.md)
+- [XRPL Supply Chain Security Analysis](https://github.com/vinylwasp/XRPL-contribs/blob/main/XRPL-Supply-Chain-Security-Analysis.md) (companion: examines the build chain, dependency chain, and distribution chain in depth)
 - [XRPL Vulnerability Disclosure Report (Feb 2026)](https://xrpl.org/blog/2026/vulnerabilitydisclosurereport-bug-feb2026)
 - [rippled CONTRIBUTING.md](https://github.com/XRPLF/rippled/blob/develop/CONTRIBUTING.md)
 - [rippled SECURITY.md](https://github.com/XRPLF/rippled/blob/develop/SECURITY.md)

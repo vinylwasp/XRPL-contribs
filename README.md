@@ -20,6 +20,10 @@ These documents are offered in the spirit of the XRPL itself: open, transparent,
 
 - **[XRPL STRIDE Threat Model](XRPL-STRIDE-Threat-Model.md)** - A structured STRIDE analysis of the XRPL protocol and `rippled` implementation, with threat actor profiles, 22 threats mapped to MITRE ATT&CK, AADAPT, and ATLAS frameworks, critical attack chains, and prioritised recommendations. Open for community contribution.
 
+### Supply Chain
+
+- **[XRPL Supply Chain Security Analysis](XRPL-Supply-Chain-Security-Analysis.md)** - Maps the three supply chains (consensus node, client libraries, specifications), analyses the xrpl.js npm compromise (April 2025), examines dependency risks, single-platform concentration, version pinning strategy, and provides a validator verification checklist.
+
 ### Governance
 
 - **[XRPL Amendment Security Governance](XRPL-Release-Governance.md)** - Six gates for amendments, from specification to validator voting. Designed for XRPL's unique architecture (maintainer-built code, validator-governed activation). Acknowledges existing processes (CONTRIBUTING.md, SECURITY.md, Discussion #5379) and proposes incremental additions. Community proposal, not a mandate.
